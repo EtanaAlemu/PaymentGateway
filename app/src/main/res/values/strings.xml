@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Payment Gateway</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+    <string name="nav_header_desc">Payment Gateway</string>
+    <string name="nav_header_title">This app is for payment</string>
+    <string name="nav_header_subtitle">this is sub title</string>
+</resources>
