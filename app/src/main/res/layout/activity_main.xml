@@ -41,13 +41,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:gravity="center">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
+                android:id="@+id/amount_layout"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="8"
                 android:focusedByDefault="false"
                 app:endIconMode="clear_text"
                 android:layout_margin="8dp">
@@ -57,41 +57,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
+                    android:textSize="24dp"
                     android:text="0"
                     android:hint="Price"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.cardview.widget.CardView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_tips"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/tip"
-                app:cardBackgroundColor="#f5f5f5"
-                android:layout_margin="8dp"
-                android:layout_weight="1">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="8dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:text="Tip"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:textColor="#AB6832"
-                        android:text="5%"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_item"
-            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <Button
             android:layout_width="match_parent"

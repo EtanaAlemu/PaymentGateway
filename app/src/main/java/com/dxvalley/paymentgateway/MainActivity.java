@@ -12,31 +12,50 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
+import com.dxvalley.paymentgateway.adapter.ItemAdapter;
+import com.dxvalley.paymentgateway.adapter.TipAdapter;
+import com.dxvalley.paymentgateway.db.ItemDatabase;
+import com.dxvalley.paymentgateway.db.TipDatabase;
+import com.dxvalley.paymentgateway.models.Item;
+import com.dxvalley.paymentgateway.models.Tip;
+import com.dxvalley.paymentgateway.ui.SettingActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener , ItemClickListener{
+    public static final String ITEM_ADAPTER = "ITEM ADAPTER";
+    public static final String TIP_ADAPTER = "TIP ADAPTER";
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
 
     static List<Item> items;
-    static ItemDatabase database ;
+    static ItemDatabase itemDatabase ;
+    static List<Tip> tips;
+    static TipDatabase tipDatabase ;
     LinearLayout mNoItemView;
     LinearLayout mProgressView;
-    ItemAdapter adapter;
-    RecyclerView recyclerView;
+    ItemAdapter itemAdapter;
+    RecyclerView itemRecyclerView;
+    TipAdapter tipAdapter;
+    RecyclerView tipRecyclerView;
     TextInputEditText mAmount;
-    CardView mTip;
+    TextInputLayout amountLayout;
+
     boolean isTipEnabled = false;
+    float tipValue = 0f;
+    boolean isByPercent = true;
+    float amount = 0f;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +67,15 @@ public class MainActivity extends AppCompatActivity implements
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
 
         mAmount = findViewById(R.id.amount);
-        mTip = findViewById(R.id.tip);
+        amountLayout = findViewById(R.id.amount_layout);
+        amountLayout.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                amount = 0f;
+                mAmount.setText("0");
+                isTipEnabled = false;
+            }
+        });
 
         // pass the Open and Close toggle for the drawer layout listener
         // to toggle the button
@@ -69,32 +96,36 @@ public class MainActivity extends AppCompatActivity implements
         mProgressView =findViewById(R.id.progress);
 
         // Lookup the recyclerview in activity layout
-        recyclerView = findViewById(R.id.list_item);
-
-        mTip.setOnClickListener(view -> {
-            isTipEnabled = !isTipEnabled;
-
-            float amount = Float.parseFloat(mAmount.getText().toString());
-            amount += 0.05*amount;
-            mAmount.setText(String.valueOf(amount));
-        });
+        itemRecyclerView = findViewById(R.id.list_item);
+        tipRecyclerView = findViewById(R.id.list_tips);
 
         // Initialize contacts
         items = new ArrayList<Item>();
+        tips = new ArrayList<Tip>();
         setUpAdapter();
-        getSavedTasks();
+        getSavedItems();
+        getSavedTips();
 
     }
 
     public void setUpAdapter() {
         // Create adapter passing in the sample user data
-        adapter = new ItemAdapter(items);
+        itemAdapter = new ItemAdapter(items);
         // Attach the adapter to the recyclerview to populate items
-        recyclerView.setAdapter(adapter);
+        itemRecyclerView.setAdapter(itemAdapter);
         // Set layout manager to position the items
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        itemRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        adapter.setClickListener(this); // Bind the listener
+        itemAdapter.setClickListener(this); // Bind the listener
+
+        // Create adapter passing in the sample user data
+        tipAdapter = new TipAdapter(tips);
+        // Attach the adapter to the recyclerview to populate items
+        tipRecyclerView.setAdapter(tipAdapter);
+        // Set layout manager to position the items
+        tipRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+
+        tipAdapter.setClickListener(this); // Bind the listener
     }
 
 
@@ -102,7 +133,9 @@ public class MainActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         getSavedItems();
-        adapter.notifyDataSetChanged();
+        itemAdapter.notifyDataSetChanged();
+        getSavedTips();
+        tipAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -130,14 +163,14 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    private void getSavedTasks() {
+    private void getSavedItems() {
 
         class GetSavedItems extends AsyncTask<Void, Void, List<Item>> {
             @Override
             protected List<Item> doInBackground(Void... voids) {
 
-                database = ItemDatabase.getInstance(getApplicationContext());
-                items = database.itemDao().getItemList();
+                itemDatabase = ItemDatabase.getInstance(getApplicationContext());
+                items = itemDatabase.itemDao().getItemList();
                 return items;
             }
 
@@ -153,36 +186,57 @@ public class MainActivity extends AppCompatActivity implements
         savedItems.execute();
     }
 
+    private void getSavedTips() {
 
-    private void getSavedItems() {
-
-        class GetSavedItems extends AsyncTask<Void, Void, List<Item>> {
+        class GetSavedTips extends AsyncTask<Void, Void, List<Tip>> {
             @Override
-            protected List<Item> doInBackground(Void... voids) {
+            protected List<Tip> doInBackground(Void... voids) {
 
-                database = ItemDatabase.getInstance(getApplicationContext());
-                items = database.itemDao().getItemList();
-                return items;
+                tipDatabase = TipDatabase.getInstance(getApplicationContext());
+                tips = tipDatabase.tipDao().getTipList();
+                return tips;
             }
 
             @Override
-            protected void onPostExecute(List<Item> items) {
-                super.onPostExecute(items);
-                mNoItemView.setVisibility(items.isEmpty() ? View.VISIBLE : View.GONE);
+            protected void onPostExecute(List<Tip> tips) {
+                super.onPostExecute(tips);
                 setUpAdapter();
             }
         }
 
-        GetSavedItems savedTasks = new GetSavedItems();
-        savedTasks.execute();
+        GetSavedTips savedTips = new GetSavedTips();
+        savedTips.execute();
     }
 
     @Override
-    public void onClick(View view, int position) {
-        final Item item = items.get(position);
-        float amount = Float.parseFloat(mAmount.getText().toString());
-        amount += Float.parseFloat(item.price);
-        mAmount.setText(String.valueOf(amount));
+    public void onClick(View view, int position, String adapter) {
+
+
+        if(Objects.equals(adapter, ITEM_ADAPTER)) {
+            final Item item = items.get(position);
+            amount += Float.parseFloat(item.getPrice());
+
+        } else {
+            final Tip tip = tips.get(position);
+            isTipEnabled = true;
+            tipValue = tip.getValue();
+            isByPercent = tip.isByPercent();
+        }
+        updatePrice();
+    }
+
+    private void updatePrice(){
+
+        if(isTipEnabled){
+            float totalAmount;
+            if(isByPercent)
+                totalAmount = amount + (tipValue * amount / 100);
+            else
+                totalAmount = amount + tipValue;
+            mAmount.setText(String.valueOf(totalAmount));
+        } else{
+            mAmount.setText(String.valueOf(amount));
+        }
 
     }
 }

@@ -1,4 +1,4 @@
-package com.dxvalley.paymentgateway;
+package com.dxvalley.paymentgateway.ui;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,41 +13,47 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.dxvalley.paymentgateway.ItemClickListener;
+import com.dxvalley.paymentgateway.R;
+import com.dxvalley.paymentgateway.adapter.TipAdapter;
+import com.dxvalley.paymentgateway.db.TipDatabase;
+import com.dxvalley.paymentgateway.models.Item;
+import com.dxvalley.paymentgateway.models.Tip;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemManagerActivity extends AppCompatActivity
+public class TipsManagerActivity extends AppCompatActivity implements ItemClickListener {
 
-        implements ItemClickListener{
 
-    static List<Item> items;
-    static ItemDatabase database ;
-    LinearLayout mNoItemView;
+    static List<Tip> tips;
+    static TipDatabase database ;
+    LinearLayout mNoTipView;
     LinearLayout mProgressView;
-    ItemAdapter adapter;
+    TipAdapter adapter;
     RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_manager);
+        setContentView(R.layout.activity_tips_manager);
 
-        mNoItemView = findViewById(R.id.no_item);
+        mNoTipView = findViewById(R.id.no_item);
         mProgressView =findViewById(R.id.progress);
 
         // Lookup the recyclerview in activity layout
-        recyclerView = findViewById(R.id.list_item);
+        recyclerView = findViewById(R.id.tips_rv);
 
         // Initialize contacts
-        items = new ArrayList<Item>();
+        tips = new ArrayList<Tip>();
         setUpAdapter();
-        getSavedItems();
+        getSavedTips();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getSavedItems();
+        getSavedTips();
     }
 
     @Override
@@ -58,7 +64,7 @@ public class ItemManagerActivity extends AppCompatActivity
         ActionBar ab = getSupportActionBar();
         ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle("Setting");
+        ab.setTitle("Tips");
         ab.show();
 
         return true;
@@ -72,9 +78,9 @@ public class ItemManagerActivity extends AppCompatActivity
                 finish();
                 break;
             case R.id.action_add:
-                Intent addItemIntent = new Intent(this, AddItemActivity.class);
-                addItemIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(addItemIntent);
+                Intent addTipIntent = new Intent(this, AddTipActivity.class);
+                addTipIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(addTipIntent);
 //                finish();
                 break;
         }
@@ -84,7 +90,7 @@ public class ItemManagerActivity extends AppCompatActivity
 
     public void setUpAdapter() {
         // Create adapter passing in the sample user data
-        adapter = new ItemAdapter(items);
+        adapter = new TipAdapter(tips);
         // Attach the adapter to the recyclerview to populate items
         recyclerView.setAdapter(adapter);
         // Set layout manager to position the items
@@ -94,39 +100,38 @@ public class ItemManagerActivity extends AppCompatActivity
 
     }
 
-    private void getSavedItems() {
+    private void getSavedTips() {
 
-        class GetSavedItems extends AsyncTask<Void, Void, List<Item>> {
+        class GetSavedTips extends AsyncTask<Void, Void, List<Tip>> {
             @Override
-            protected List<Item> doInBackground(Void... voids) {
+            protected List<Tip> doInBackground(Void... voids) {
 
-                database = ItemDatabase.getInstance(getApplicationContext());
-                items = database.itemDao().getItemList();
-                return items;
+                database = TipDatabase.getInstance(getApplicationContext());
+                tips = database.tipDao().getTipList();
+                return tips;
             }
 
             @Override
-            protected void onPostExecute(List<Item> items) {
-                super.onPostExecute(items);
-                mNoItemView.setVisibility(items.isEmpty() ? View.VISIBLE : View.GONE);
+            protected void onPostExecute(List<Tip> tips) {
+                super.onPostExecute(tips);
+                mNoTipView.setVisibility(tips.isEmpty() ? View.VISIBLE : View.GONE);
                 setUpAdapter();
             }
         }
 
-        GetSavedItems savedTasks = new GetSavedItems();
-        savedTasks.execute();
+        GetSavedTips savedTips = new GetSavedTips();
+        savedTips.execute();
     }
 
 
     @Override
-    public void onClick(View view, int position) {
+    public void onClick(View view, int position, String adapter) {
         // The onClick implementation of the RecyclerView item click
-        final Item item = items.get(position);
-        Intent i = new Intent(this, EditItemActivity.class);
-        i.putExtra("id", item.id);
-        i.putExtra("name", item.name);
-        i.putExtra("image", item.image);
-        i.putExtra("price", item.price);
+        final Tip tip = tips.get(position);
+        Intent i = new Intent(this, EditTipActivity.class);
+        i.putExtra("id", tip.getId());
+        i.putExtra("isByPercent", tip.isByPercent());
+        i.putExtra("value", tip.getValue());
         startActivity(i);
     }
 

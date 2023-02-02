@@ -1,18 +1,18 @@
-package com.dxvalley.paymentgateway;
+package com.dxvalley.paymentgateway.ui;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 
+import com.dxvalley.paymentgateway.R;
+import com.dxvalley.paymentgateway.db.ItemDatabase;
+import com.dxvalley.paymentgateway.models.Item;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
 

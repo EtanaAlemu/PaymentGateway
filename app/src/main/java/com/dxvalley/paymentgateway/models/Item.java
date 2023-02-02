@@ -1,4 +1,4 @@
-package com.dxvalley.paymentgateway;
+package com.dxvalley.paymentgateway.models;
 
 import androidx.room.*;
 

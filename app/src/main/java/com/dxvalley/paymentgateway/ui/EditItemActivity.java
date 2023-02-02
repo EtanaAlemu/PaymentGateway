@@ -1,4 +1,4 @@
-package com.dxvalley.paymentgateway;
+package com.dxvalley.paymentgateway.ui;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -6,13 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
+import com.dxvalley.paymentgateway.R;
+import com.dxvalley.paymentgateway.db.ItemDatabase;
+import com.dxvalley.paymentgateway.models.Item;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
@@ -141,13 +143,13 @@ public class EditItemActivity extends AppCompatActivity {
             }
         }
 
-        UpdateItems savedTasks = new UpdateItems();
-        savedTasks.execute();
+        UpdateItems updateItems = new UpdateItems();
+        updateItems.execute();
     }
 
     private void deleteItemList(Item mItem) {
 
-        class CreateItems extends AsyncTask<Void, Void, List<Item>> {
+        class DeleteItems extends AsyncTask<Void, Void, List<Item>> {
             @Override
             protected List<Item> doInBackground(Void... voids) {
 
@@ -169,7 +171,7 @@ public class EditItemActivity extends AppCompatActivity {
             }
         }
 
-        CreateItems savedTasks = new CreateItems();
-        savedTasks.execute();
+        DeleteItems deleteItems = new DeleteItems();
+        deleteItems.execute();
     }
 }

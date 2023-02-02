@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="@dimen/tooltip_horizontal_padding"
     android:orientation="vertical"
-    tools:context=".EditItemActivity">
+    tools:context=".ui.EditItemActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"

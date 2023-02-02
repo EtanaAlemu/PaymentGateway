@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/tooltip_horizontal_padding"
     android:orientation="vertical"
-    tools:context=".ui.AddItemActivity">
+    android:padding="16dp"
+    tools:context=".ui.EditTipActivity">
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -17,27 +17,32 @@
         app:boxBackgroundMode="outline">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Name"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:boxBackgroundMode="outline">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/price"
+            android:id="@+id/tip_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:hint="Price"/>
+            android:hint="Value"/>
     </com.google.android.material.textfield.TextInputLayout>
+
+    <RadioGroup
+        android:id="@+id/unit_radio"
+        android:layout_margin="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/by_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="By Percent"/>
+        <RadioButton
+            android:id="@+id/by_fixed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="By Fixed"/>
+    </RadioGroup>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,6 +67,5 @@
             android:layout_height="wrap_content"
             android:text="Save"/>
     </LinearLayout>
-
 
 </LinearLayout>

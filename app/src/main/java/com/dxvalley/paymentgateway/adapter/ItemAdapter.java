@@ -1,4 +1,6 @@
-package com.dxvalley.paymentgateway;
+package com.dxvalley.paymentgateway.adapter;
+
+import static com.dxvalley.paymentgateway.MainActivity.ITEM_ADAPTER;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +12,10 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.dxvalley.paymentgateway.ItemClickListener;
+import com.dxvalley.paymentgateway.R;
+import com.dxvalley.paymentgateway.db.ItemDatabase;
+import com.dxvalley.paymentgateway.models.Item;
 
 import java.util.List;
 
@@ -31,7 +37,6 @@ public class ItemAdapter extends
 
         ImageView itemImage;
         TextView itemName;
-        TextView itemDescription;
         TextView itemPrice;
 
         // We also create a constructor that accepts the entire item row
@@ -50,7 +55,7 @@ public class ItemAdapter extends
 
         @Override
         public void onClick(View view) {
-            if (clickListener != null)  clickListener.onClick(view, getAdapterPosition()); // call the onClick in the OnItemClickListener
+            if (clickListener != null)  clickListener.onClick(view, getAdapterPosition(), ITEM_ADAPTER); // call the onClick in the OnItemClickListener
         }
     }
 
@@ -73,7 +78,7 @@ public class ItemAdapter extends
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.item_list, parent, false);
+        View contactView = inflater.inflate(R.layout.items_item, parent, false);
 
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(contactView);

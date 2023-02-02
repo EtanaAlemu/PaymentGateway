@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="8dp"
-    tools:context=".SettingActivity">
+    tools:context=".ui.SettingActivity">
 
 
         <TextView
@@ -17,6 +17,35 @@
             android:padding="8dp"
             android:text="Manage Items"
             android:textSize="18sp"/>
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_margin="16dp"
+    android:background="@android:color/darker_gray"
+    />
+        <TextView
+            android:id="@+id/manage_tips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:padding="8dp"
+            android:text="Manage Tips"
+            android:textSize="18sp"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="16dp"
+            android:background="@android:color/darker_gray"
+            />
+
+        <TextView
+            android:id="@+id/customize_app"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:padding="8dp"
+            android:text="Customize App"
+            android:textSize="18sp"/>
 
 </LinearLayout>
