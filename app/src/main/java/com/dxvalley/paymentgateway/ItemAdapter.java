@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class ItemAdapter extends
@@ -42,6 +44,7 @@ public class ItemAdapter extends
             itemImage = itemView.findViewById(R.id.item_image);
             itemName = itemView.findViewById(R.id.item_name);
             itemPrice = itemView.findViewById(R.id.item_price);
+
             itemView.setOnClickListener(this); // bind the listener
         }
 
@@ -86,6 +89,9 @@ public class ItemAdapter extends
         // Set item views based on your views and data model
         holder.itemName.setText(itemList.get(position).getName());
         holder.itemPrice.setText(itemList.get(position).getPrice() + " Birr");
+        Glide.with(holder.itemImage)
+                .load(itemList.get(position).getImage()).into(holder.itemImage);
+
     }
 
     // Returns the total count of items in the list

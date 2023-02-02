@@ -5,35 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="8dp"
     tools:context=".SettingActivity">
 
-    <LinearLayout
-        android:id="@+id/progress"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:gravity="center">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/no_item"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:gravity="center">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/manage_items"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="No Item"/>
-    </LinearLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="4dp"/>
+            android:clickable="true"
+            android:padding="8dp"
+            android:text="Manage Items"
+            android:textSize="18sp"/>
+
 
 </LinearLayout>

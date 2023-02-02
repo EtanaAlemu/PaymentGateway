@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements
             isTipEnabled = !isTipEnabled;
 
             float amount = Float.parseFloat(mAmount.getText().toString());
-            amount *= 0.05;
+            amount += 0.05*amount;
             mAmount.setText(String.valueOf(amount));
         });
 

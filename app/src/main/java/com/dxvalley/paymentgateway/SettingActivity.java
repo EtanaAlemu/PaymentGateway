@@ -13,120 +13,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingActivity extends AppCompatActivity implements ItemClickListener{
+public class SettingActivity extends AppCompatActivity
 
-    static List<Item> items;
-    static ItemDatabase database ;
-    LinearLayout mNoItemView;
-    LinearLayout mProgressView;
-    ItemAdapter adapter;
-    RecyclerView recyclerView;
+
+
+{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        mNoItemView = findViewById(R.id.no_item);
-        mProgressView =findViewById(R.id.progress);
-
-        // Lookup the recyclerview in activity layout
-        recyclerView = findViewById(R.id.list_item);
-
-        // Initialize contacts
-        items = new ArrayList<Item>();
-        setUpAdapter();
-        getSavedItems();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getSavedItems();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.setting_menu, menu);
-
-        ActionBar ab = getSupportActionBar();
-        ab.setHomeButtonEnabled(true);
-        ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle("Setting");
-        ab.show();
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-            case R.id.action_add:
-                Intent addItemIntent = new Intent(this, AddItemActivity.class);
-                addItemIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(addItemIntent);
-//                finish();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void setUpAdapter() {
-        // Create adapter passing in the sample user data
-        adapter = new ItemAdapter(items);
-        // Attach the adapter to the recyclerview to populate items
-        recyclerView.setAdapter(adapter);
-        // Set layout manager to position the items
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
-        adapter.setClickListener(this); // Bind the listener
+        TextView mManageItems = findViewById(R.id.manage_items);
+        mManageItems.setOnClickListener(view -> {
+            startActivity(new Intent(this, ItemManagerActivity.class));
+        });
 
     }
-
-    private void getSavedItems() {
-
-        class GetSavedItems extends AsyncTask<Void, Void, List<Item>> {
-            @Override
-            protected List<Item> doInBackground(Void... voids) {
-
-                database = ItemDatabase.getInstance(getApplicationContext());
-                items = database.itemDao().getItemList();
-                return items;
-            }
-
-            @Override
-            protected void onPostExecute(List<Item> items) {
-                super.onPostExecute(items);
-                mNoItemView.setVisibility(items.isEmpty() ? View.VISIBLE : View.GONE);
-                setUpAdapter();
-            }
-        }
-
-        GetSavedItems savedTasks = new GetSavedItems();
-        savedTasks.execute();
-    }
-
-
-    @Override
-    public void onClick(View view, int position) {
-        // The onClick implementation of the RecyclerView item click
-        final Item item = items.get(position);
-        Intent i = new Intent(this, EditItemActivity.class);
-        i.putExtra("id", item.id);
-        i.putExtra("name", item.name);
-        i.putExtra("image", item.image);
-        i.putExtra("price", item.price);
-        startActivity(i);
-    }
-
 }

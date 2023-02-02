@@ -38,9 +38,6 @@ public class AddItemActivity extends AppCompatActivity {
         });
 
         cancelItem.setOnClickListener(view -> {
-//            Intent settingIntent = new Intent(AddItemActivity.this, SettingActivity.class);
-//            settingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            startActivity(settingIntent);
             finish();
         });
     }
