@@ -9,13 +9,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.dxvalley.paymentgateway.adapter.ItemAdapter;
 import com.dxvalley.paymentgateway.adapter.TipAdapter;
@@ -23,6 +26,7 @@ import com.dxvalley.paymentgateway.db.ItemDatabase;
 import com.dxvalley.paymentgateway.db.TipDatabase;
 import com.dxvalley.paymentgateway.models.Item;
 import com.dxvalley.paymentgateway.models.Tip;
+import com.dxvalley.paymentgateway.ui.PaymentActivity;
 import com.dxvalley.paymentgateway.ui.SettingActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -36,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener , ItemClickListener{
     public static final String ITEM_ADAPTER = "ITEM ADAPTER";
     public static final String TIP_ADAPTER = "TIP ADAPTER";
+
+    private Context mContext;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -51,15 +57,19 @@ public class MainActivity extends AppCompatActivity implements
     RecyclerView tipRecyclerView;
     TextInputEditText mAmount;
     TextInputLayout amountLayout;
+    Button mPay;
 
     boolean isTipEnabled = false;
     float tipValue = 0f;
     boolean isByPercent = true;
     float amount = 0f;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mContext = this;
 
         // drawer layout instance to toggle the menu icon to open
         // drawer and back button to close drawer
@@ -68,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements
 
         mAmount = findViewById(R.id.amount);
         amountLayout = findViewById(R.id.amount_layout);
+
         amountLayout.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,6 +109,17 @@ public class MainActivity extends AppCompatActivity implements
         // Lookup the recyclerview in activity layout
         itemRecyclerView = findViewById(R.id.list_item);
         tipRecyclerView = findViewById(R.id.list_tips);
+        mPay = findViewById(R.id.pay);
+        mPay.setOnClickListener(view -> {
+            float amount = Float.parseFloat(Objects.requireNonNull(mAmount.getText()).toString());
+            if(amount!=0){
+            Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
+            intent.putExtra("amount", amount);
+            startActivity(intent);}
+            else{
+                Toast.makeText(mContext, "Amount can't be 0.0 Birr", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // Initialize contacts
         items = new ArrayList<Item>();
