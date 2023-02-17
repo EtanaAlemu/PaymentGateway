@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements
     static List<Tip> tips;
     static TipDatabase tipDatabase ;
     LinearLayout mNoItemView;
-    LinearLayout mProgressView;
     ItemAdapter itemAdapter;
     RecyclerView itemRecyclerView;
     TipAdapter tipAdapter;
@@ -104,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements
 
 
         mNoItemView = findViewById(R.id.no_item);
-        mProgressView =findViewById(R.id.progress);
 
         // Lookup the recyclerview in activity layout
         itemRecyclerView = findViewById(R.id.list_item);

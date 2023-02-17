@@ -23,6 +23,7 @@ xmlns:tools="http://schemas.android.com/tools">
         </activity>
     <activity
         android:name=".ui.TipsManagerActivity"
+        android:screenOrientation="landscape"
         android:exported="false">
         <meta-data
             android:name="android.app.lib_name"
@@ -30,6 +31,7 @@ xmlns:tools="http://schemas.android.com/tools">
     </activity>
     <activity
         android:name=".ui.ItemManagerActivity"
+        android:screenOrientation="landscape"
         android:exported="false">
         <meta-data
             android:name="android.app.lib_name"
@@ -37,6 +39,7 @@ xmlns:tools="http://schemas.android.com/tools">
     </activity>
     <activity
         android:name=".ui.AddItemActivity"
+        android:screenOrientation="landscape"
         android:exported="false">
         <meta-data
             android:name="android.app.lib_name"
@@ -44,6 +47,7 @@ xmlns:tools="http://schemas.android.com/tools">
     </activity>
     <activity
         android:name=".ui.EditItemActivity"
+        android:screenOrientation="landscape"
         android:exported="false">
         <meta-data
             android:name="android.app.lib_name"
@@ -51,6 +55,7 @@ xmlns:tools="http://schemas.android.com/tools">
     </activity>
     <activity
         android:name=".ui.SettingActivity"
+        android:screenOrientation="landscape"
         android:exported="false">
         <meta-data
             android:name="android.app.lib_name"
@@ -58,6 +63,7 @@ xmlns:tools="http://schemas.android.com/tools">
     </activity>
     <activity
         android:name=".MainActivity"
+        android:screenOrientation="landscape"
         android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
@@ -70,12 +76,14 @@ xmlns:tools="http://schemas.android.com/tools">
             android:value="" />
     </activity>
     <activity android:name=".ui.AddTipActivity"
+        android:screenOrientation="landscape"
         android:exported="false">
         <meta-data
             android:name="android.app.lib_name"
             android:value="" />
     </activity>
     <activity android:name=".ui.EditTipActivity"
+        android:screenOrientation="landscape"
         android:exported="false">
         <meta-data
             android:name="android.app.lib_name"
