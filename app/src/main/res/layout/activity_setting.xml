@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="8dp"
-    tools:context=".ui.SettingActivity">
+    tools:context=".retailservices.ui.SettingActivity">
 
 
         <TextView
@@ -40,12 +40,28 @@
             />
 
         <TextView
-            android:id="@+id/customize_app"
+            android:id="@+id/device_config"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:padding="8dp"
-            android:text="Customize App"
+            android:text="Device Configuration"
+            android:textSize="18sp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="16dp"
+            android:background="@android:color/darker_gray"
+            />
+
+
+        <TextView
+            android:id="@+id/services"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:padding="8dp"
+            android:text="Services"
             android:textSize="18sp"/>
 
 </LinearLayout>

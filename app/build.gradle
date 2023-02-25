@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
-
 android {
     namespace 'com.dxvalley.paymentgateway'
     compileSdk 32
@@ -34,6 +34,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.android.support:multidex:2.0.1'
+    //CircleImageView
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
     //Room Database
     implementation "androidx.room:room-runtime:2.4.2"
     implementation 'androidx.room:room-common:2.4.2'
@@ -43,8 +45,13 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    //image picker and crop
+    implementation "com.karumi:dexter:5.0.0"
+    implementation 'com.github.yalantis:ucrop:2.2.2'
     //volley
     implementation 'com.android.volley:volley:1.2.1'
+    //otp
+    implementation 'com.chaos.view:pinview:1.4.3'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
