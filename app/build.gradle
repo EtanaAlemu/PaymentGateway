@@ -42,6 +42,7 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.5.0"
     //DB Backup
     implementation 'de.raphaelebner:roomdatabasebackup:1.0.0-beta11'
+
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
