@@ -29,6 +29,7 @@ public class CheckoutActivity extends AppCompatActivity implements CheckoutItemI
     ArrayList<Integer> itemsId;
 
     float amount;
+    float tip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class CheckoutActivity extends AppCompatActivity implements CheckoutItemI
 //        ArrayList<String> itemsId = extras.getStringArrayList("items");
         itemsId = extras.getIntegerArrayList("items");
         amount = extras.getFloat("amount");
+        tip = extras.getFloat("tip");
 
         Integer[] arr = new Integer[itemsId.size()];
         arr = itemsId.toArray(arr);
@@ -61,8 +63,10 @@ public class CheckoutActivity extends AppCompatActivity implements CheckoutItemI
 
         TextView finalAmount = findViewById(R.id.final_amount);
         TextView totalAmount = findViewById(R.id.total_amount);
-        finalAmount.setText(String.valueOf(amount));
+        TextView mTip = findViewById(R.id.tip);
+        finalAmount.setText(String.format("%.2f",amount-tip));
         totalAmount.setText(String.valueOf(amount));
+        mTip.setText(String.format("%.2f",tip));
 
     }
 

@@ -19,6 +19,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -50,14 +51,17 @@ public class AddItemActivity extends AppCompatActivity {
     String imageName;
     Bitmap bitmap;
 
+    TextInputEditText name;
+    TextInputEditText price;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
 
         image = findViewById(R.id.item_image);
-        TextInputEditText name = findViewById(R.id.name);
-        TextInputEditText price = findViewById(R.id.price);
+        name = findViewById(R.id.name);
+        price = findViewById(R.id.price);
         Button saveItem = findViewById(R.id.save);
         Button cancelItem = findViewById(R.id.cancel);
         imageName = String.valueOf(System.currentTimeMillis()/1000)+".png";
@@ -66,23 +70,34 @@ public class AddItemActivity extends AppCompatActivity {
             pickImg();
         });
 
+        price.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                saveItem();
+                return true;
+            }
+            return false;
+        });
         saveItem.setOnClickListener(view -> {
-            String mName = name.getText().toString();
-            String mPrice = price.getText().toString();
-            if(mName.isEmpty() || mPrice.isEmpty() || bitmap == null){
-                Toast.makeText(this, "Please insert all info", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                Item item = new Item(imageName, mName, mPrice);
-                saveToInternalStorage(bitmap);
-                createItemList(item);
-            }
+            saveItem();
         });
 
         cancelItem.setOnClickListener(view -> {
             finish();
         });
         loadImageFromStorage("/data/data/com.dxvalley.paymentgateway/app_image");
+    }
+
+    private void saveItem() {
+        String mName = name.getText().toString();
+        String mPrice = price.getText().toString();
+        if(mName.isEmpty() || mPrice.isEmpty() || bitmap == null){
+            Toast.makeText(this, "Please insert all info", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Item item = new Item(imageName, mName, mPrice);
+            saveToInternalStorage(bitmap);
+            createItemList(item);
+        }
     }
 
     @Override

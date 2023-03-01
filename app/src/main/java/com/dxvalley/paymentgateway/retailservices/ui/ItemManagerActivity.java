@@ -2,6 +2,7 @@ package com.dxvalley.paymentgateway.retailservices.ui;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,16 +27,19 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.raphaelebner.roomdatabasebackup.core.RoomBackup;
+
 public class ItemManagerActivity extends AppCompatActivity
 
         implements ItemsItemClickListener {
 
+    private static final String TAG = "MY APP";
     static List<Item> items;
     static ItemDatabase database ;
     LinearLayout mNoItemView;
     ItemAdapter adapter;
     RecyclerView recyclerView;
-
+    RoomBackup roomBackup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,11 +57,12 @@ public class ItemManagerActivity extends AppCompatActivity
             addItemIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(addItemIntent);
         });
-
         // Initialize contacts
         items = new ArrayList<Item>();
         setUpAdapter();
         getSavedItems();
+
+        roomBackup = new RoomBackup(this);
     }
 
     @Override
@@ -68,7 +74,13 @@ public class ItemManagerActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.setting_menu, menu);
+        getMenuInflater().inflate(R.menu.setting_menu, menu);
+
+        if(menu instanceof MenuBuilder){
+            MenuBuilder m = (MenuBuilder) menu;
+            //noinspection RestrictedApi
+            m.setOptionalIconsVisible(true);
+        }
 
         ActionBar ab = getSupportActionBar();
         ab.setHomeButtonEnabled(true);
@@ -85,6 +97,32 @@ public class ItemManagerActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.action_backup:
+
+                roomBackup.database(ItemDatabase.getInstance(this));
+                roomBackup.enableLogDebug(true);
+                roomBackup.backupIsEncrypted(false);
+                roomBackup.backupLocation(RoomBackup.BACKUP_FILE_LOCATION_INTERNAL);
+                roomBackup.maxFileCount(5);
+                roomBackup.onCompleteListener((success, message, exitCode) -> {
+                    Log.d(TAG, "success: " + success + ", message: " + message + ", exitCode: " + exitCode);
+                    if (success) roomBackup.restartApp(new Intent(getApplicationContext(), ItemManagerActivity.class));
+                });
+                roomBackup.backup();
+                break;
+
+            case R.id.action_restore:
+
+                roomBackup.database(ItemDatabase.getInstance(this));
+                roomBackup.enableLogDebug(true);
+                roomBackup.backupIsEncrypted(false);
+                roomBackup.backupLocation(RoomBackup.BACKUP_FILE_LOCATION_INTERNAL);
+                roomBackup.onCompleteListener((success, message, exitCode) -> {
+                    Log.d(TAG, "success: " + success + ", message: " + message + ", exitCode: " + exitCode);
+                    if (success) roomBackup.restartApp(new Intent(getApplicationContext(), ItemManagerActivity.class));
+                });
+                roomBackup.restore();
                 break;
         }
 

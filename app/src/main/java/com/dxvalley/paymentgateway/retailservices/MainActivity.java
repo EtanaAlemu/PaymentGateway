@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setStatusBarColor(Color.WHITE);
         setContentView(R.layout.activity_main);
 
         mContext = this;
@@ -112,13 +114,24 @@ public class MainActivity extends AppCompatActivity implements
         mProceed.setOnClickListener(view -> {
             String sAmount = mAmount.getText().toString();
 
-            float amount = 0;
+            float amount = 0f;
+            float tip = 0f;
+
+
             if (!sAmount.isEmpty()) {
                 amount = Float.parseFloat(sAmount);
             }
             if (amount != 0) {
+                if (isTipEnabled) {
+                    if (isByPercent)
+                        tip = tipValue * amount / 100;
+                    else
+                        tip =  tipValue;
+                }
+
                 Intent intent = new Intent(MainActivity.this, CheckoutActivity.class);
                 intent.putExtra("amount", amount);
+                intent.putExtra("tip", tip);
                 intent.putIntegerArrayListExtra("items", itemsId);
                 startActivity(intent);
             } else {
@@ -155,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements
         tipAdapter.setClickListener(this); // Bind the listener
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -188,7 +200,6 @@ public class MainActivity extends AppCompatActivity implements
         drawerLayout.closeDrawers();
         return true;
     }
-
 
     private void getSavedItems() {
 
@@ -234,7 +245,6 @@ public class MainActivity extends AppCompatActivity implements
         GetSavedTips savedTips = new GetSavedTips();
         savedTips.execute();
     }
-
 
     private void updatePrice() {
 

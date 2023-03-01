@@ -1,10 +1,16 @@
 package com.dxvalley.paymentgateway;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.dxvalley.paymentgateway.otherservices.LoginActivity;
 import com.dxvalley.paymentgateway.retailservices.MainActivity;
@@ -14,9 +20,20 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        View decorView = getWindow().getDecorView();
+        // Hide both the navigation bar and the status bar.
+        // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
+        // a general rule, you should design your app to hide the status bar whenever you
+        // hide the navigation bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(uiOptions);
+        getWindow().setStatusBarColor(Color.WHITE);
 
-        /****** Create Thread that will sleep for 5 seconds****/
+        setContentView(R.layout.activity_splash);
+        TextView mAppVersion = findViewById(R.id.app_version);
+        mAppVersion.setText("v "+BuildConfig.VERSION_NAME);
+
+        /****** Create Thread that will sleep for 2 seconds****/
         Thread background = new Thread() {
             public void run() {
                 try {

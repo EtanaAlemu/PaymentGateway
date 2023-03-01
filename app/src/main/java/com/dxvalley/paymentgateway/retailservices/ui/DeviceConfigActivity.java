@@ -10,14 +10,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -28,18 +30,17 @@ import com.dxvalley.paymentgateway.R;
 import com.dxvalley.paymentgateway.retailservices.db.DeviceConfigDatabase;
 import com.dxvalley.paymentgateway.retailservices.models.DeviceConfig;
 import com.dxvalley.paymentgateway.retailservices.util.VolleySingleton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class DeviceConfigActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView mSecretKey, mClientId, mApiKey;
+    TextInputEditText mSecretKey, mClientId, mApiKey;
     Button mRegister;
     private String url;
 
@@ -69,6 +70,13 @@ public class DeviceConfigActivity extends AppCompatActivity implements View.OnCl
         mRegister = findViewById(R.id.register_btn);
         url = getString(R.string.device_cofig_api);
         mRegister.setOnClickListener(this);
+        mApiKey.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                deviceRegister();
+                return true;
+            }
+            return false;
+        });
         getDeviceConfig();
     }
 
@@ -101,82 +109,90 @@ public class DeviceConfigActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.register_btn:
-
-                secretkey = mSecretKey.getText().toString();
-                clientid = mClientId.getText().toString();
-                apikey = mApiKey.getText().toString();
-                if(secretkey.isEmpty()){
-                    Toast.makeText(mContext, "Secret Key cant be empty", Toast.LENGTH_SHORT).show();
-                }
-                else if(clientid.isEmpty()){
-                    Toast.makeText(mContext, "Client ID cant be empty", Toast.LENGTH_SHORT).show();}
-                else if(apikey.isEmpty()){
-                    Toast.makeText(mContext, "API Key cant be empty", Toast.LENGTH_SHORT).show();}
-                else{
                     deviceRegister();
-                }
                 break;
 
         }
     }
 
     private void deviceRegister() {
-        ProgressDialog pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Loading...");
-        pDialog.show();
-        //RequestQueue initialized
-        mRequestQueue = Volley.newRequestQueue(this);
 
-        //String Request initialized
-        mRequest = new JsonObjectRequest(Request.Method.POST, url,request(), new Response.Listener() {
-            @Override
-            public void onResponse(Object response) {
-                Toast.makeText(getApplicationContext(),"Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
+        secretkey = mSecretKey.getText().toString();
+        clientid = mClientId.getText().toString();
+        apikey = mApiKey.getText().toString();
+        if (secretkey.isEmpty()) {
+            Toast.makeText(mContext, "Secret Key cant be empty", Toast.LENGTH_SHORT).show();
+        } else if (clientid.isEmpty()) {
+            Toast.makeText(mContext, "Client ID cant be empty", Toast.LENGTH_SHORT).show();
+        } else if (apikey.isEmpty()) {
+            Toast.makeText(mContext, "API Key cant be empty", Toast.LENGTH_SHORT).show();
+        } else {
+            ProgressDialog pDialog = new ProgressDialog(this);
+            pDialog.setMessage("Loading...");
+            pDialog.show();
+            //RequestQueue initialized
+            mRequestQueue = Volley.newRequestQueue(this);
 
-                Log.i(TAG,"Response :" + response.toString());
-                pDialog.cancel();
-                try {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject = (JSONObject) response;
-                    if(jsonObject.get("status") == "success"){
-                        if(isFirstTime)
-                            addDeviceConfig(new DeviceConfig(clientid,secretkey,apikey,deviceId));
-                        else
-                            updateDeviceConfig(new DeviceConfig(mId,clientid,secretkey,apikey,deviceId));
+            //String Request initialized
+            mRequest = new JsonObjectRequest(Request.Method.POST, url, request(), new Response.Listener() {
+                @Override
+                public void onResponse(Object response) {
+//                Toast.makeText(getApplicationContext(),"Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
+
+                    Log.i(TAG, "Response :" + response);
+
+                    pDialog.cancel();
+                    try {
+                        JSONObject jsonObject = (JSONObject) response;
+                        String status = jsonObject.get("status").toString();
+                        String message = jsonObject.get("message").toString();
+                        Toast.makeText(getApplicationContext(), "Response :" + status, Toast.LENGTH_LONG).show();//display the response on screen
+                        Toast.makeText(getApplicationContext(), "Response :" + message, Toast.LENGTH_LONG).show();//display the response on screen
+
+                        if (status.equals("success")) {
+                            if (isFirstTime)
+                                addDeviceConfig(new DeviceConfig(clientid, secretkey, apikey, deviceId));
+                            else
+                                updateDeviceConfig(new DeviceConfig(mId, clientid, secretkey, apikey, deviceId));
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(), "Response Error :" + response, Toast.LENGTH_LONG).show();//display the response on screen
+                        throw new RuntimeException(e);
                     }
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
                 }
-            }
 
 
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
 
-                Log.i(TAG,"Error :" + error.toString());
-                pDialog.cancel();
+                    Log.i(TAG, "Error :" + error.toString());
+                    Toast.makeText(getApplicationContext(), "Volley Error :" + error, Toast.LENGTH_LONG).show();//display the response on screen
+
+                    pDialog.cancel();
 
 
-                if(isFirstTime)
-                    addDeviceConfig(new DeviceConfig(clientid,secretkey,apikey,deviceId));
-                else
-                    updateDeviceConfig(new DeviceConfig(mId,clientid,secretkey,apikey,deviceId));
-            }
-        }){
+                    if (isFirstTime)
+                        addDeviceConfig(new DeviceConfig(clientid, secretkey, apikey, deviceId));
+                    else
+                        updateDeviceConfig(new DeviceConfig(mId, clientid, secretkey, apikey, deviceId));
+                }
+            }) {
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+                @Override
+                protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                    int mStatusCode = response.statusCode;
+                    Toast.makeText(getApplicationContext(), "Status Code :" + mStatusCode, Toast.LENGTH_LONG).show();//display the response on screen
 
-        VolleySingleton.getInstance(this).addToRequestQueue(mRequest);
+                    return super.parseNetworkResponse(response);
+                }
+            };
+
+            VolleySingleton.getInstance(this).addToRequestQueue(mRequest);
 
 
         }
+    }
 
     static DeviceConfigDatabase database ;
     static List<DeviceConfig> config;
@@ -195,7 +211,7 @@ public class DeviceConfigActivity extends AppCompatActivity implements View.OnCl
             @Override
             protected void onPostExecute(List<DeviceConfig> configs) {
                 super.onPostExecute(configs);
-                finish();
+//                finish();
             }
         }
 
@@ -218,7 +234,7 @@ public class DeviceConfigActivity extends AppCompatActivity implements View.OnCl
             @Override
             protected void onPostExecute(List<DeviceConfig> items) {
                 super.onPostExecute(items);
-                finish();
+//                finish();
             }
         }
 
@@ -273,10 +289,12 @@ public class DeviceConfigActivity extends AppCompatActivity implements View.OnCl
 
             Log.i(TAG, "device Id: "+deviceId);
 
+
         }catch(JSONException e){
 
+            Toast.makeText(getApplicationContext(),"JSON Error :" + e, Toast.LENGTH_LONG).show();//display the response on screen
 
-            Log.i(TAG,"Error :" + e.toString());
+            Log.i(TAG,"Error :" + e);
         }
         return requestObject;
     }

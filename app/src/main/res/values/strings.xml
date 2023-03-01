@@ -5,10 +5,11 @@
     <string name="nav_header_desc">Payment Gateway</string>
     <string name="nav_header_title">This app is for payment</string>
     <string name="nav_header_subtitle">this is sub title</string>
-    <string name="device_cofig_api">http://10.1.245.150:7080/v1/otp</string>
+    <string name="device_cofig_api">http://192.168.8.126:5000/device/register/</string>
     <string name="payment_api">http://10.1.245.150:7080/v1/otp/</string>
     <string name="please_type_the_verification_code_sent_to_n_9xxxxxxx19">Please type the verification code sent to\n+9XXXXXXX19</string>
     <string name="verification_code">Verification Code</string>
     <string name="show_error">SHOW ERROR</string>
     <string name="show_success">SHOW Success</string>
+    <string name="restore_failed">Restore Failed</string>
 </resources>

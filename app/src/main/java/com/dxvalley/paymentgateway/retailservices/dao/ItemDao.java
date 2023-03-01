@@ -14,6 +14,9 @@ public interface ItemDao {
 
     @Query("SELECT * FROM item_db WHERE id in (:id)")
     List<Item> getItem(int[] id);
+
+    @Query("SELECT COUNT(id) FROM item_db")
+    int getCount();
     @Insert
     void insertItem(Item item);
     @Update
