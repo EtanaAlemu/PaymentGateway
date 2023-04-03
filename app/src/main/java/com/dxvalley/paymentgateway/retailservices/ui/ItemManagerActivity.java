@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -135,7 +136,17 @@ public class ItemManagerActivity extends AppCompatActivity
         // Attach the adapter to the recyclerview to populate items
         recyclerView.setAdapter(adapter);
         // Set layout manager to position the items
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+        int spanCount;
+        int orientation = getApplicationContext().getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            spanCount=2;
+        } else {
+            spanCount=4;
+        }
+        GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
+        // Set layout manager to position the items
+        recyclerView.setLayoutManager(layoutManager);
+
 
         adapter.setClickListener(this); // Bind the listener
 

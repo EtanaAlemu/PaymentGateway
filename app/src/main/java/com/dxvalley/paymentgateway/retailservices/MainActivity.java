@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -65,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(savedInstanceState != null)
+        {
+            mEditText.setText(savedInstanceState.getString("textKey"));
+        }
         super.onCreate(savedInstanceState);
         getWindow().setStatusBarColor(Color.WHITE);
         setContentView(R.layout.activity_main);
@@ -153,8 +159,16 @@ public class MainActivity extends AppCompatActivity implements
         itemAdapter = new ItemAdapter(items);
         // Attach the adapter to the recyclerview to populate items
         itemRecyclerView.setAdapter(itemAdapter);
+        int spanCount;
+        int orientation = getApplicationContext().getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            spanCount=2;
+        } else {
+            spanCount=4;
+        }
+        GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
         // Set layout manager to position the items
-        itemRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+        itemRecyclerView.setLayoutManager(layoutManager);
 
         itemAdapter.setClickListener(this); // Bind the listener
 
@@ -200,7 +214,12 @@ public class MainActivity extends AppCompatActivity implements
         drawerLayout.closeDrawers();
         return true;
     }
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        outState.putString("textKey", mEditText.getText().toString());
+    }
     private void getSavedItems() {
 
         class GetSavedItems extends AsyncTask<Void, Void, List<Item>> {
