@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         if(savedInstanceState != null)
         {
-            mEditText.setText(savedInstanceState.getString("textKey"));
+//            mEditText.setText(savedInstanceState.getString("textKey"));
         }
         super.onCreate(savedInstanceState);
         getWindow().setStatusBarColor(Color.WHITE);
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-        outState.putString("textKey", mEditText.getText().toString());
+//        outState.putString("textKey", mEditText.getText().toString());
     }
     private void getSavedItems() {
 

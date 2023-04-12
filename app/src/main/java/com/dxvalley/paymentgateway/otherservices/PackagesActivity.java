@@ -20,6 +20,7 @@ public class PackagesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_packages);
         Button mHaji = findViewById(R.id.haji);
         Button mUmrah = findViewById(R.id.umrah);
+        Button mNedaj = findViewById(R.id.nedaj);
         mHaji.setOnClickListener(view -> {
 
         });
@@ -29,6 +30,10 @@ public class PackagesActivity extends AppCompatActivity {
 
         mHaji.setOnClickListener(view -> {
             startActivity(new Intent(PackagesActivity.this, HajiActivity.class));
+        });
+
+        mNedaj.setOnClickListener(view -> {
+            startActivity(new Intent(PackagesActivity.this, NedajActivity.class));
         });
 
 
