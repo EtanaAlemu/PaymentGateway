@@ -18,19 +18,17 @@ public class PackagesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_packages);
-        Button mHaji = findViewById(R.id.haji);
-        Button mUmrah = findViewById(R.id.umrah);
+//        Button mHaji = findViewById(R.id.haji);
+//        Button mUmrah = findViewById(R.id.umrah);
         Button mNedaj = findViewById(R.id.nedaj);
-        mHaji.setOnClickListener(view -> {
 
-        });
-        mUmrah.setOnClickListener(view -> {
-            startActivity(new Intent(PackagesActivity.this, UmraActivity.class));
-        });
-
-        mHaji.setOnClickListener(view -> {
-            startActivity(new Intent(PackagesActivity.this, HajiActivity.class));
-        });
+//        mUmrah.setOnClickListener(view -> {
+//            startActivity(new Intent(PackagesActivity.this, UmraActivity.class));
+//        });
+//
+//        mHaji.setOnClickListener(view -> {
+//            startActivity(new Intent(PackagesActivity.this, HajiActivity.class));
+//        });
 
         mNedaj.setOnClickListener(view -> {
             startActivity(new Intent(PackagesActivity.this, NedajActivity.class));

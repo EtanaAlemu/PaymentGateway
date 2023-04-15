@@ -69,7 +69,11 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         if(savedInstanceState != null)
         {
-//            mEditText.setText(savedInstanceState.getString("textKey"));
+            isTipEnabled = savedInstanceState.getBoolean("isTipEnabled");
+            isByPercent = savedInstanceState.getBoolean("isByPercent");
+            tipValue = savedInstanceState.getFloat("tipValue");
+            amount = savedInstanceState.getFloat("amount");
+            itemsId = savedInstanceState.getIntegerArrayList("itemsId");
         }
         super.onCreate(savedInstanceState);
         getWindow().setStatusBarColor(Color.WHITE);
@@ -215,10 +219,14 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
     @Override
-    protected void onSaveInstanceState(Bundle outState)
+    protected void onSaveInstanceState(@NonNull Bundle outState)
     {
         super.onSaveInstanceState(outState);
-//        outState.putString("textKey", mEditText.getText().toString());
+        outState.putBoolean("isTipEnabled",isTipEnabled);
+        outState.putBoolean("isByPercent",isByPercent);
+        outState.putFloat("tipValue",tipValue);
+        outState.putFloat("amount",amount);
+        outState.putIntegerArrayList("itemsId",itemsId);
     }
     private void getSavedItems() {
 

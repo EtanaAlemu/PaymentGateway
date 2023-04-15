@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Payment Gateway</string>
+    <string name="app_name">Nedaj</string>
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
     <string name="nav_header_desc">Payment Gateway</string>
@@ -12,4 +12,5 @@
     <string name="show_error">SHOW ERROR</string>
     <string name="show_success">SHOW Success</string>
     <string name="restore_failed">Restore Failed</string>
+
 </resources>

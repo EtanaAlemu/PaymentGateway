@@ -8,30 +8,30 @@
     android:gravity="center"
     tools:context=".otherservices.PackagesActivity">
 
-    <Button
-        android:id="@+id/haji"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:padding="8dp"
-        android:background="@color/blue"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:text="Haji Travel"/>
-    <Button
-        android:id="@+id/umrah"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:padding="8dp"
-        android:background="@color/blue"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:text="Umrah Travel"/>
+<!--    <Button-->
+<!--        android:id="@+id/haji"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="8dp"-->
+<!--        android:padding="8dp"-->
+<!--        android:background="@color/blue"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textSize="24sp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:text="Haji Travel"/>-->
+<!--    <Button-->
+<!--        android:id="@+id/umrah"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="8dp"-->
+<!--        android:padding="8dp"-->
+<!--        android:background="@color/blue"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textSize="24sp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:text="Umrah Travel"/>-->
 
 
     <Button

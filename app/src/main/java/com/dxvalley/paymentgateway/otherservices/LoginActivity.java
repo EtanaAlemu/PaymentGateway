@@ -2,6 +2,8 @@ package com.dxvalley.paymentgateway.otherservices;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItem;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKeys;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +21,9 @@ import com.dxvalley.paymentgateway.ServicesActivity;
 import com.dxvalley.paymentgateway.retailservices.MainActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -38,6 +43,33 @@ public class LoginActivity extends AppCompatActivity {
                 Snackbar snackbar = Snackbar.make(layout,"Please enter username and password",Snackbar.LENGTH_LONG);
                 snackbar.show();
             } else {
+
+                // on below line we are setting data in our shared preferences.
+                // creating a master key for encryption of shared preferences.
+                String masterKeyAlias = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    try {
+                        masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+
+                        // Initialize/open an instance of EncryptedSharedPreferences on below line.
+                        SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                                // passing a file name to share a preferences
+                                "MerchantInfo",
+                                masterKeyAlias,
+                                getApplicationContext(),
+                                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+                        );
+                        // on below line we are storing data in shared preferences file.
+                        sharedPreferences.edit().putString("username", mUsername.getText().toString()).apply();
+
+                    } catch (GeneralSecurityException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+
                 // Storing data into SharedPreferences
                 SharedPreferences sharedPreferences = getSharedPreferences("MerchantInfo", MODE_PRIVATE);
                 // Creating an Editor object to edit(write to the file)
@@ -45,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                 // Storing the key and its value as the data fetched from edittext
                 myEdit.putString("username", mUsername.getText().toString());
                 myEdit.apply();
-
+                }
 
                 startActivity(new Intent(LoginActivity.this, PackagesActivity.class));
             }
