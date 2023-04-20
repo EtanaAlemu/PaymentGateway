@@ -151,7 +151,7 @@ public class NedajActivity extends AppCompatActivity {
                     "\n\"AgentId\": \"" + username + "\"," +
                     "\n\"Amount\": \"" + mAmount.getText() + "\"," +
                     "\n\"Liter\": \"" + mLiter.getText() + "\"," +
-                    "\n\"FuelType\": \"Regular\"," +
+                    "\n\"FuelType\": \""+fuelName+"\"," +
                     "\n\"PlateNumber\": \"" + mPlateNumber.getText() + "\"\n}";
             KeyPair keypair
                     = null;
@@ -177,10 +177,12 @@ public class NedajActivity extends AppCompatActivity {
                 final AlertDialog qrDialog = new AlertDialog.Builder(this).create();
                 qrDialog.setView(qrDialogView);
                 ImageView imageView = qrDialogView.findViewById(R.id.qr);
-                TextView pubKey = qrDialogView.findViewById(R.id.pubKey);
-                TextView prvKey = qrDialogView.findViewById(R.id.prvKey);
-                TextView encrypted = qrDialogView.findViewById(R.id.encrypted);
-                TextView decrypted = qrDialogView.findViewById(R.id.decrypted);
+
+
+//                TextView pubKey = qrDialogView.findViewById(R.id.pubKey);
+//                TextView prvKey = qrDialogView.findViewById(R.id.prvKey);
+//                TextView encrypted = qrDialogView.findViewById(R.id.encrypted);
+//                TextView decrypted = qrDialogView.findViewById(R.id.decrypted);
 
 //                pubKey.setText("PUBLIC:   "+Base64.getEncoder().encodeToString(keypair.getPublic().getEncoded()));
 //                prvKey.setText("PRIVATE:  "+Base64.getEncoder().encodeToString(keypair.getPrivate().getEncoded()));
@@ -221,7 +223,6 @@ public class NedajActivity extends AppCompatActivity {
                 if(!Objects.requireNonNull(mAmount.getText()).toString().isEmpty())
                     amount = Float.parseFloat(String.valueOf(mAmount.getText()));
                 mLiter.setText(String.valueOf(amount/priceLiter));
-
 
             }
         });
