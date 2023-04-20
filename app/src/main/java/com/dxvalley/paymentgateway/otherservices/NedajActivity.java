@@ -2,24 +2,28 @@ package com.dxvalley.paymentgateway.otherservices;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dxvalley.paymentgateway.R;
+import com.dxvalley.paymentgateway.otherservices.adapter.NedajAdapter;
+import com.dxvalley.paymentgateway.otherservices.model.Fuel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -29,31 +33,39 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Objects;
 
-public class NedajActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+import javax.crypto.Cipher;
 
-    private Spinner spinner;
-    private static final String[] fuel = {"Regular", "Diesel"};
-    private static final float[] price = {65.00F, 70.00F};
-    private int fuelTypeSelected;
+public class NedajActivity extends AppCompatActivity {
 
+    private static  String fuelName ;
+    private static float priceLiter ;
+    RecyclerView fuelRecyclerView;
+    NedajAdapter nedajAdapter;
+    ArrayList<Fuel> fuels;
+
+    TextInputEditText mAmount ;
+    TextInputEditText mLiter ;
+    TextInputEditText mPlateNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nedaj);
-
-        TextInputEditText mAmount = findViewById(R.id.amount);
-        TextInputEditText mLiter = findViewById(R.id.liter);
-        TextInputEditText mPlateNumber = findViewById(R.id.plate_number);
+        mAmount = findViewById(R.id.amount);
+        mLiter = findViewById(R.id.liter);
+        mPlateNumber = findViewById(R.id.plate_number);
         Button mProceed = findViewById(R.id.proceed);
 
-        spinner = (Spinner) findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(NedajActivity.this,
-                android.R.layout.simple_spinner_item, fuel);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+        fuelRecyclerView = findViewById(R.id.fuel_rv);
 
         // on below line getting data from shared preferences.
         // creating a master key for encryption of shared preferences.
@@ -107,7 +119,7 @@ public class NedajActivity extends AppCompatActivity implements AdapterView.OnIt
                 if(s.length()>0)
                     amount = Float.parseFloat(s.toString());
                 if(mAmount.isFocused())
-                    mLiter.setText(String.valueOf(amount/price[fuelTypeSelected]));
+                    mLiter.setText(String.valueOf(amount/priceLiter));
             }
         });
         mLiter.addTextChangedListener(new TextWatcher() {
@@ -129,61 +141,154 @@ public class NedajActivity extends AppCompatActivity implements AdapterView.OnIt
                     liter = Float.parseFloat(s.toString());
 
                 if(mLiter.isFocused())
-                    mAmount.setText(String.valueOf(price[fuelTypeSelected]*liter));
+                    mAmount.setText(String.valueOf(priceLiter*liter));
             }
         });
 
 
         mProceed.setOnClickListener(v -> {
             String text = "{\n\"MerchantId\": \"" + username + "\"," +
-                    "\n\"Name\": \"" + username + "\"," +
+                    "\n\"AgentId\": \"" + username + "\"," +
                     "\n\"Amount\": \"" + mAmount.getText() + "\"," +
                     "\n\"Liter\": \"" + mLiter.getText() + "\"," +
-//                    "\n\"PlateNumber\": \"" + mPlateNumber.getText() + "\"," +
+                    "\n\"FuelType\": \"Regular\"," +
                     "\n\"PlateNumber\": \"" + mPlateNumber.getText() + "\"\n}";
-            MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+            KeyPair keypair
+                    = null;
+            byte[] cipherText
+                    = new byte[0];
             try {
+                keypair = generateRSAKkeyPair();
 
+                cipherText = do_RSAEncryption(
+                text,
+                keypair.getPrivate());
+                String encryptedText = do_RSAEncryption(
+                        text,
+                        keypair.getPrivate()).toString();
+                String decryptedText
+                        = do_RSADecryption(
+                        cipherText,
+                        keypair.getPublic());
+
+                MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                 LayoutInflater factory = LayoutInflater.from(this);
                 final View qrDialogView = factory.inflate(R.layout.qr_dialog, null);
-
                 final AlertDialog qrDialog = new AlertDialog.Builder(this).create();
                 qrDialog.setView(qrDialogView);
                 ImageView imageView = qrDialogView.findViewById(R.id.qr);
+                TextView pubKey = qrDialogView.findViewById(R.id.pubKey);
+                TextView prvKey = qrDialogView.findViewById(R.id.prvKey);
+                TextView encrypted = qrDialogView.findViewById(R.id.encrypted);
+                TextView decrypted = qrDialogView.findViewById(R.id.decrypted);
+
+//                pubKey.setText("PUBLIC:   "+Base64.getEncoder().encodeToString(keypair.getPublic().getEncoded()));
+//                prvKey.setText("PRIVATE:  "+Base64.getEncoder().encodeToString(keypair.getPrivate().getEncoded()));
+//                encrypted.setText("ENCRYPTED:  "+Base64.getEncoder().encodeToString(cipherText) );
+//                decrypted.setText("DECRYPTED:  "+decryptedText);
+
+
                 imageView.setOnClickListener(v1 -> {
                     //your business logic
                     qrDialog.dismiss();
                 });
-                BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE, 1000, 1000);
+                BitMatrix bitMatrix = multiFormatWriter.encode(Base64.getEncoder().encodeToString(cipherText), BarcodeFormat.QR_CODE, 1000, 1000);
                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                 Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                 imageView.setImageBitmap(bitmap);
                 qrDialog.show();
-            } catch (WriterException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
+
+        // Initialize contacts
+        fuels = new ArrayList<Fuel>();
+        fuels.add(new Fuel("Regular",60.0f));
+        fuels.add(new Fuel("Diesel",70.0f));
+        setUpAdapter();
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+    public void setUpAdapter() {
+        // Create adapter passing in the sample user data
+        nedajAdapter = new NedajAdapter(fuels, new NedajItemClickListener() {
+            @Override
+            public void onItemClick(Fuel fuel) {
 
-        switch (position) {
-            case 0:
-                fuelTypeSelected = 0;
-                break;
-            case 1:
-                fuelTypeSelected = 1;
-                break;
-            case 2:
-                // Whatever you want to happen when the thrid item gets selected
-                break;
+                fuelName = fuel.getType();
+                priceLiter = fuel.getPrice();
+                float amount = 0f;
+                if(!Objects.requireNonNull(mAmount.getText()).toString().isEmpty())
+                    amount = Float.parseFloat(String.valueOf(mAmount.getText()));
+                mLiter.setText(String.valueOf(amount/priceLiter));
 
+
+            }
+        });
+        // Attach the adapter to the recyclerview to populate items
+        fuelRecyclerView.setAdapter(nedajAdapter);
+        int spanCount;
+        int orientation = getApplicationContext().getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            spanCount=2;
+        } else {
+            spanCount=2;
         }
+
+        GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
+        // Set layout manager to position the items
+        fuelRecyclerView.setLayoutManager(layoutManager);
+
     }
 
+
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        // TODO Auto-generated method stub
+    protected void onResume() {
+        super.onResume();
+        nedajAdapter.notifyDataSetChanged();
     }
+    public static KeyPair generateRSAKkeyPair()
+            throws Exception
+    {
+        SecureRandom secureRandom
+                = new SecureRandom();
+        KeyPairGenerator keyPairGenerator
+                = KeyPairGenerator.getInstance("RSA");
+
+        keyPairGenerator.initialize(
+                2048, secureRandom);
+        return keyPairGenerator
+                .generateKeyPair();
+    }
+
+    public static byte[] do_RSAEncryption(
+            String plainText,
+            PrivateKey privateKey)
+            throws Exception
+    {
+        Cipher cipher
+                = Cipher.getInstance("RSA");
+
+        cipher.init(
+                Cipher.ENCRYPT_MODE, privateKey);
+
+        return cipher.doFinal(
+                plainText.getBytes());
+    }
+    public static String do_RSADecryption(
+            byte[] cipherText,
+            PublicKey publicKey)
+            throws Exception
+    {
+        Cipher cipher
+                = Cipher.getInstance("RSA");
+
+        cipher.init(Cipher.DECRYPT_MODE,
+                publicKey);
+        byte[] result
+                = cipher.doFinal(cipherText);
+
+        return new String(result);
+    }
+
 }

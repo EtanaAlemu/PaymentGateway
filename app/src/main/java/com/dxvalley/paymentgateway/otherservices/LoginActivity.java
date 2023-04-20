@@ -39,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
         LinearLayout layout = findViewById(R.id.layout);
         login.setOnClickListener(view -> {
             if (mUsername.getText().toString().isEmpty() || mPassword.getText().toString().isEmpty()) {
-
                 Snackbar snackbar = Snackbar.make(layout,"Please enter username and password",Snackbar.LENGTH_LONG);
                 snackbar.show();
             } else {
