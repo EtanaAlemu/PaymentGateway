@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
                 Snackbar snackbar = Snackbar.make(layout,"Please enter username and password",Snackbar.LENGTH_LONG);
                 snackbar.show();
             } else {
-
+                login(mUsername.getText().toString(),mPassword.getText().toString());
                 // on below line we are setting data in our shared preferences.
                 // creating a master key for encryption of shared preferences.
                 String masterKeyAlias = null;
@@ -82,6 +82,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void login(String username, String password) {
 
     }
 

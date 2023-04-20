@@ -17,7 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.dxvalley.paymentgateway.R;
-import com.dxvalley.paymentgateway.retailservices.util.VolleySingleton;
+import com.dxvalley.paymentgateway.util.VolleySingleton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;

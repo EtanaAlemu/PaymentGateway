@@ -10,13 +10,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
@@ -29,7 +27,7 @@ import com.android.volley.toolbox.Volley;
 import com.dxvalley.paymentgateway.R;
 import com.dxvalley.paymentgateway.retailservices.db.DeviceConfigDatabase;
 import com.dxvalley.paymentgateway.retailservices.models.DeviceConfig;
-import com.dxvalley.paymentgateway.retailservices.util.VolleySingleton;
+import com.dxvalley.paymentgateway.util.VolleySingleton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;

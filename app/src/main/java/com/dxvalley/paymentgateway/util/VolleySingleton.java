@@ -1,4 +1,4 @@
-package com.dxvalley.paymentgateway.retailservices.util;
+package com.dxvalley.paymentgateway.util;
 
 import android.content.Context;
 
