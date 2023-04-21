@@ -177,6 +177,7 @@ public class NedajActivity extends AppCompatActivity {
                 final AlertDialog qrDialog = new AlertDialog.Builder(this).create();
                 qrDialog.setView(qrDialogView);
                 ImageView imageView = qrDialogView.findViewById(R.id.qr);
+                Button mFinish = qrDialogView.findViewById(R.id.finish);
 
 
 //                TextView pubKey = qrDialogView.findViewById(R.id.pubKey);
@@ -184,20 +185,25 @@ public class NedajActivity extends AppCompatActivity {
 //                TextView encrypted = qrDialogView.findViewById(R.id.encrypted);
 //                TextView decrypted = qrDialogView.findViewById(R.id.decrypted);
 
-//                pubKey.setText("PUBLIC:   "+Base64.getEncoder().encodeToString(keypair.getPublic().getEncoded()));
-//                prvKey.setText("PRIVATE:  "+Base64.getEncoder().encodeToString(keypair.getPrivate().getEncoded()));
+                System.out.println("PUBLIC:   "+Base64.getEncoder().encodeToString(keypair.getPublic().getEncoded()));
+                System.out.println("PRIVATE:  "+Base64.getEncoder().encodeToString(keypair.getPrivate().getEncoded()));
 //                encrypted.setText("ENCRYPTED:  "+Base64.getEncoder().encodeToString(cipherText) );
 //                decrypted.setText("DECRYPTED:  "+decryptedText);
 
 
-                imageView.setOnClickListener(v1 -> {
+                mFinish.setOnClickListener(v1 -> {
                     //your business logic
                     qrDialog.dismiss();
+                    mAmount.setText(null);
+                    mLiter.setText(null);
+                    mPlateNumber.setText(null);
                 });
                 BitMatrix bitMatrix = multiFormatWriter.encode(Base64.getEncoder().encodeToString(cipherText), BarcodeFormat.QR_CODE, 1000, 1000);
                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                 Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                 imageView.setImageBitmap(bitmap);
+                qrDialog.setCancelable(false);
+                qrDialog.setCanceledOnTouchOutside(false);
                 qrDialog.show();
             } catch (Exception e) {
                 e.printStackTrace();
