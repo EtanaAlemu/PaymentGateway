@@ -8,6 +8,7 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -15,6 +16,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dxvalley.paymentgateway.R;
+import com.dxvalley.paymentgateway.ServicesActivity;
 import com.dxvalley.paymentgateway.otherservices.adapter.NedajAdapter;
 import com.dxvalley.paymentgateway.otherservices.model.Fuel;
 import com.google.android.material.textfield.TextInputEditText;
@@ -257,6 +262,32 @@ public class NedajActivity extends AppCompatActivity {
         super.onResume();
         nedajAdapter.notifyDataSetChanged();
     }
+
+
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+
+        inflater.inflate(R.menu.nedaj_menu, menu);
+
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.report:
+                startActivity(new Intent(this, NedajTransactionActivity.class));
+
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
     public static KeyPair generateRSAKkeyPair()
             throws Exception
     {

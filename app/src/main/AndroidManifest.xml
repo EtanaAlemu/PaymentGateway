@@ -2,13 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-sdk android:minSdkVersion="10" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.NFC" />
-    <uses-sdk android:minSdkVersion="10"/>
-    <uses-feature android:name="android.hardware.nfc" android:required="true" />
+
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:configChanges="orientation|screenSize"
@@ -22,6 +27,9 @@
         android:theme="@style/Theme.PaymentGateway"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".NedajTransactionActivity"
+            android:exported="false" />
         <activity
             android:name=".otherservices.NedajActivity"
             android:exported="false" />
@@ -45,8 +53,8 @@
             android:exported="false" />
         <activity
             android:name=".retailservices.MainActivity"
-            android:exported="false"
             android:configChanges="orientation|screenSize"
+            android:exported="false"
             android:theme="@style/Theme.PaymentGateway.NoActionBar" />
         <activity
             android:name=".retailservices.ui.CheckoutActivity"

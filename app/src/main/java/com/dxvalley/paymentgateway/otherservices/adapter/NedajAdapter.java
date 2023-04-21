@@ -86,9 +86,6 @@ public class NedajAdapter extends
     }
 
 
-    public void setItems(List<Fuel> items) {
-        this.itemList = items;
-    }
 
     // Usually involves inflating a layout from XML and returning the holder
     @Override

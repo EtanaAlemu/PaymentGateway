@@ -1,5 +1,6 @@
 package com.dxvalley.paymentgateway.otherservices;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
@@ -7,6 +8,7 @@ import androidx.security.crypto.MasterKeys;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -29,12 +31,14 @@ import com.dxvalley.paymentgateway.retailservices.models.DeviceConfig;
 import com.dxvalley.paymentgateway.util.VolleySingleton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Base64;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -71,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //String Request initialized
         mRequest = new JsonObjectRequest(Request.Method.POST, url, request(username, password), new Response.Listener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(Object response) {
 //                Toast.makeText(getApplicationContext(),"Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
@@ -80,14 +85,29 @@ public class LoginActivity extends AppCompatActivity {
                 pDialog.cancel();
                 try {
                     JSONObject jsonObject = (JSONObject) response;
-                    String status = jsonObject.get("status").toString();
-                    String message = jsonObject.get("message").toString();
-                    Toast.makeText(getApplicationContext(), "Response :" + status, Toast.LENGTH_LONG).show();//display the response on screen
-                    Toast.makeText(getApplicationContext(), "Response :" + message, Toast.LENGTH_LONG).show();//display the response on screen
+                    String token = jsonObject.get("token").toString();
+                    String[] chunks = token.split("\\.");
+                    Base64.Decoder decoder = Base64.getUrlDecoder();
 
-                    if (status.equals("success")) {
-                        loginProceed(message);
+                    String header = new String(decoder.decode(chunks[0]));
+                    String payload = new String(decoder.decode(chunks[1]));
+                    JSONObject obj = null;
+                    try {
+
+                        obj = new JSONObject(payload);
+
+                        Log.d("My App", obj.toString());
+
+                    } catch (Throwable t) {
+                        Log.e("My App", "Could not parse malformed JSON: \"" + payload + "\"");
                     }
+                    Gson gson= new Gson();
+                    User user = gson.fromJson(jsonObject.toString(),User.class);
+
+
+
+                    loginProceed(user);
+
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "Response Error :" + response, Toast.LENGTH_LONG).show();//display the response on screen
                     throw new RuntimeException(e);
@@ -103,7 +123,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Volley Error :" + error, Toast.LENGTH_LONG).show();//display the response on screen
 
                 pDialog.cancel();
-                loginProceed("user1");
 
             }
         }) {
@@ -122,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void loginProceed(String username){
+    private void loginProceed(User user){
 
         // on below line we are setting data in our shared preferences.
         // creating a master key for encryption of shared preferences.
@@ -134,14 +153,19 @@ public class LoginActivity extends AppCompatActivity {
                 // Initialize/open an instance of EncryptedSharedPreferences on below line.
                 SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
                         // passing a file name to share a preferences
-                        "MerchantInfo",
+                        "UserInfo",
                         masterKeyAlias,
                         getApplicationContext(),
                         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
                 );
                 // on below line we are storing data in shared preferences file.
-                sharedPreferences.edit().putString("username", username).apply();
+                sharedPreferences.edit().putString("agent_id", user.agent.agent_id).apply();
+                sharedPreferences.edit().putString("email_address", user.agent.email_address).apply();
+                sharedPreferences.edit().putString("user_id", user.agent.user_id).apply();
+                sharedPreferences.edit().putString("fname", user.agent.fname).apply();
+                sharedPreferences.edit().putString("lname", user.agent.lname).apply();
+                sharedPreferences.edit().putString("role", user.agent.role).apply();
 
             } catch (GeneralSecurityException e) {
                 throw new RuntimeException(e);
@@ -151,15 +175,20 @@ public class LoginActivity extends AppCompatActivity {
         } else {
 
             // Storing data into SharedPreferences
-            SharedPreferences sharedPreferences = getSharedPreferences("MerchantInfo", MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
             // Creating an Editor object to edit(write to the file)
-            SharedPreferences.Editor myEdit = sharedPreferences.edit();
             // Storing the key and its value as the data fetched from edittext
-            myEdit.putString("username", username);
-            myEdit.apply();
+
+            sharedPreferences.edit().putString("agent_id", user.agent.agent_id).apply();
+            sharedPreferences.edit().putString("email_address", user.agent.email_address).apply();
+            sharedPreferences.edit().putString("user_id", user.agent.user_id).apply();
+            sharedPreferences.edit().putString("fname", user.agent.fname).apply();
+            sharedPreferences.edit().putString("lname", user.agent.lname).apply();
+            sharedPreferences.edit().putString("role", user.agent.role).apply();
+
         }
 
-        startActivity(new Intent(LoginActivity.this, PackagesActivity.class));
+        startActivity(new Intent(LoginActivity.this, NedajActivity.class));
     }
 
 
@@ -202,4 +231,18 @@ public class LoginActivity extends AppCompatActivity {
         }
         return requestObject;
     }
+}
+
+class User{
+    Agent agent;
+}
+
+class Agent{
+    String agent_id;
+    String fname;
+    String lname;
+    String email_address;
+    String phone_number;
+    String role;
+    String user_id;
 }
