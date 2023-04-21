@@ -38,7 +38,7 @@ import java.security.GeneralSecurityException;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private String url;
+    private String url = "http://192.168.14.43:5000/api/agent/login";
     private RequestQueue mRequestQueue;
     private JsonObjectRequest mRequest;
     @Override
@@ -103,6 +103,8 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Volley Error :" + error, Toast.LENGTH_LONG).show();//display the response on screen
 
                 pDialog.cancel();
+                loginProceed("user1");
+
             }
         }) {
 

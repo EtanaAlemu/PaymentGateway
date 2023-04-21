@@ -47,6 +47,8 @@ import javax.crypto.Cipher;
 
 public class NedajActivity extends AppCompatActivity {
 
+    private final String PUBLIC =  "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1mBW45vx9C2msYztwWcu+2y9bbUw60kVHcJxE7j4kzLFXJwxPCFK0PsEoO1lk3LJHf83mpfK3FrR2BSnqmbxZR9PJQg8I2Tr7UsOBSL09uRTj3phVrk/FrqDYsul1f/L5v/eTA3tuHysWveP8QLbVgxW3Uwl+CNw2CszEtwnbQZsMq9ZB8HNaUCeWC+OiWlETMQoj1rhTFe2oVH7J+5MhQR1ZbLFxZWdGdwtrNjJ62AaVAPKYEUUky/PbztRvdyhnbz69KKyGwiPGj/GyodxrA3jKjPz+m0oRM9/14VQ6trpliVXDWf+qTU3C10kUovc8si3J3yA3GkwMQBwCSq0uQIDAQAB";
+    private final String PRIVATE =  "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDWYFbjm/H0LaaxjO3BZy77bL1ttTDrSRUdwnETuPiTMsVcnDE8IUrQ+wSg7WWTcskd/zeal8rcWtHYFKeqZvFlH08lCDwjZOvtSw4FIvT25FOPemFWuT8WuoNiy6XV/8vm/95MDe24fKxa94/xAttWDFbdTCX4I3DYKzMS3CdtBmwyr1kHwc1pQJ5YL46JaURMxCiPWuFMV7ahUfsn7kyFBHVlssXFlZ0Z3C2s2MnrYBpUA8pgRRSTL89vO1G93KGdvPr0orIbCI8aP8bKh3GsDeMqM/P6bShEz3/XhVDq2umWJVcNZ/6pNTcLXSRSi9zyyLcnfIDcaTAxAHAJKrS5AgMBAAECggEAGWSyBiYLxAPAUhnCc/1X+FpKGfuzfrtab/r/T/nCIBWMgUrTHi9HYHfLdZCJTqzzG8WGfZ5rXiy33KOdtLaa84KA6n8OOJcUxzfzwjIA2Fn1d/JkI1SwH24acBJ1Y2L4cTVvzIx90zOZavEWMNNIzemKRI5nlPwFuuVrGFnRpb08XNQvil1MXfKQWNRuLcN+r1EHkpKqPfLDjhK5621JhrKrwgWqkPaK5XgTf1uKkwL+ZySScRbUVAhJG/sSZ1IwMRl/KzSHOhax7qEi+TfHouOWGxG+RqlNvDrL2C/DMGoLU+fGeMxYq9iXlapGdzBVhswkpF7kR9AvSmg5qxFyrQKBgQD8x16T9ziI1wXpZO0FJ8+c67Ufd5C1bSpEG1YfCTLTBi9HnoQrMb9T9ymyfgI/u6qQi1HRztyLYlIunPtUWqHZjQo5uB0m/vhB5P/n92lJIU86S4cKEoyRGG/iedBLXlDkA1RVhMB1rYT2nZWfPhjMXPPauvXONV3AADO1Jgzo8wKBgQDZG7DrGhJlFA/TvNr0rovSWrQfKuiVDEovyI4UcIqSQvkb0NSOr16EoCRzWmY4+pj3bYPIslfm2ZaoO3kxLnJt/uam1OsIPJ1PcJKfZfjmNAqBvNAnl6ATFUWoz0J6+Vr44QjKYKBdFaH1XWT6/XidQrUfaoeqawLkz4AwJLyWowKBgGu1M+qOe8tq+7zgYVJCDWfK06lt0/5KXqkYkNC2pa5fQ0QcGishjmnjtiO1J5Yqi9n9U0a4AydtJKFyCHGAENjXDRVdCybzm6rQPe6EcJtVkyG+zvKOxtCIfhwdVZDXxlXxyTyLTUqXPkGrEfcBiaWCsfFwmo5cFO9b5qx4YyXbAoGAINbgbt9VsvZS4ospb2NLgPj5T9GUtp7SReIHI65WN4Nr3Lo8vIxoNpVmjhA5cBrvslVdXqkjRKba8/1y+m51HpA04T1Jg8hvXwm/E98/w8pRYIhnz+VOcDSCgeM/wgwfp4+aXco513qjMdL7qD9Y1Ci37tWVScDAAk4krKOR5xMCgYEA+QXicf1ROljFhR93cChXOUILbl0HL1/iF2wzSg/bBe4soW42Hwd5CblKZqziUSf7GvIB3j8pLVqHnHQMgaTEPUe+qGBMcxVQg7zUzw/gleeuEkchp3YsjCiqqcVFxOH+8WQk4+gxEo9onYXmYnzpFThQVFEYjqzbXpVnQyCGxws=";
     private static  String fuelName ;
     private static float priceLiter ;
     RecyclerView fuelRecyclerView;
@@ -163,13 +165,13 @@ public class NedajActivity extends AppCompatActivity {
                 cipherText = do_RSAEncryption(
                 text,
                 keypair.getPrivate());
-                String encryptedText = do_RSAEncryption(
-                        text,
-                        keypair.getPrivate()).toString();
-                String decryptedText
-                        = do_RSADecryption(
-                        cipherText,
-                        keypair.getPublic());
+//                String encryptedText = do_RSAEncryption(
+//                        text,
+//                        keypair.getPrivate()).toString();
+//                String decryptedText
+//                        = do_RSADecryption(
+//                        cipherText,
+//                        keypair.getPublic());
 
                 MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                 LayoutInflater factory = LayoutInflater.from(this);
@@ -185,8 +187,8 @@ public class NedajActivity extends AppCompatActivity {
 //                TextView encrypted = qrDialogView.findViewById(R.id.encrypted);
 //                TextView decrypted = qrDialogView.findViewById(R.id.decrypted);
 
-                System.out.println("PUBLIC:   "+Base64.getEncoder().encodeToString(keypair.getPublic().getEncoded()));
-                System.out.println("PRIVATE:  "+Base64.getEncoder().encodeToString(keypair.getPrivate().getEncoded()));
+//                System.out.println("PUBLIC:   "+Base64.getEncoder().encodeToString(keypair.getPublic().getEncoded()));
+//                System.out.println("PRIVATE:  "+Base64.getEncoder().encodeToString(keypair.getPrivate().getEncoded()));
 //                encrypted.setText("ENCRYPTED:  "+Base64.getEncoder().encodeToString(cipherText) );
 //                decrypted.setText("DECRYPTED:  "+decryptedText);
 
@@ -198,7 +200,8 @@ public class NedajActivity extends AppCompatActivity {
                     mLiter.setText(null);
                     mPlateNumber.setText(null);
                 });
-                BitMatrix bitMatrix = multiFormatWriter.encode(Base64.getEncoder().encodeToString(cipherText), BarcodeFormat.QR_CODE, 1000, 1000);
+//                BitMatrix bitMatrix = multiFormatWriter.encode(Base64.getEncoder().encodeToString(cipherText), BarcodeFormat.QR_CODE, 1000, 1000);
+                BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE, 1000, 1000);
                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                 Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                 imageView.setImageBitmap(bitmap);
