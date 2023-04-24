@@ -63,6 +63,8 @@ public class NedajActivity extends AppCompatActivity {
     TextInputEditText mAmount ;
     TextInputEditText mLiter ;
     TextInputEditText mPlateNumber;
+    TextInputEditText mPlateCode;
+    TextInputEditText mPlateRegion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +72,8 @@ public class NedajActivity extends AppCompatActivity {
         mAmount = findViewById(R.id.amount);
         mLiter = findViewById(R.id.liter);
         mPlateNumber = findViewById(R.id.plate_number);
+        mPlateCode = findViewById(R.id.plate_code);
+        mPlateRegion = findViewById(R.id.plate_number_region);
         Button mProceed = findViewById(R.id.proceed);
 
         fuelRecyclerView = findViewById(R.id.fuel_rv);
@@ -159,6 +163,8 @@ public class NedajActivity extends AppCompatActivity {
                     "\n\"Amount\": \"" + mAmount.getText() + "\"," +
                     "\n\"Liter\": \"" + mLiter.getText() + "\"," +
                     "\n\"FuelType\": \""+fuelName+"\"," +
+                    "\n\"PlateRegion\": \""+mPlateRegion.getText()+"\"," +
+                    "\n\"PlateCode\": \""+mPlateCode.getText()+"\"," +
                     "\n\"PlateNumber\": \"" + mPlateNumber.getText() + "\"\n}";
             KeyPair keypair
                     = null;

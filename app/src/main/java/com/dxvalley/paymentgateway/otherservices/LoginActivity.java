@@ -104,8 +104,6 @@ public class LoginActivity extends AppCompatActivity {
                     Gson gson= new Gson();
                     User user = gson.fromJson(jsonObject.toString(),User.class);
 
-
-
                     loginProceed(user);
 
                 } catch (Exception e) {
