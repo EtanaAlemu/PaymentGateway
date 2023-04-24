@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".otherservices.NedajActivity">
+    tools:context=".otherservices.NedajActivity"
+    android:id="@+id/root_view">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
