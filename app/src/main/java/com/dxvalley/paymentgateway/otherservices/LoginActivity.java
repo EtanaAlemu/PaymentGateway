@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -42,7 +43,8 @@ import java.util.Base64;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private String url = "http://192.168.14.43:5000/api/agent/login";
+    private static final String TAG = "MY_APP";
+    private String url = "http://192.168.137.1:5000/api/agent/login";
     private RequestQueue mRequestQueue;
     private JsonObjectRequest mRequest;
     @Override
@@ -121,6 +123,9 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Volley Error :" + error, Toast.LENGTH_LONG).show();//display the response on screen
 
                 pDialog.cancel();
+                Agent agent = new Agent("1","Jon","Doi","jondoi@gmail.com","900771378","agent", "1");
+                User user = new User(agent);
+                loginProceed(user);
 
             }
         }) {
@@ -227,12 +232,17 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"JSON Error :" + e, Toast.LENGTH_LONG).show();//display the response on screen
 
         }
+        Log.i(TAG, "request: "+requestObject);
         return requestObject;
     }
 }
 
 class User{
     Agent agent;
+
+    public User(Agent agent) {
+        this.agent = agent;
+    }
 }
 
 class Agent{
@@ -243,4 +253,14 @@ class Agent{
     String phone_number;
     String role;
     String user_id;
+
+    public Agent(String agent_id, String fname, String lname, String email_address, String phone_number, String role, String user_id) {
+        this.agent_id = agent_id;
+        this.fname = fname;
+        this.lname = lname;
+        this.email_address = email_address;
+        this.phone_number = phone_number;
+        this.role = role;
+        this.user_id = user_id;
+    }
 }

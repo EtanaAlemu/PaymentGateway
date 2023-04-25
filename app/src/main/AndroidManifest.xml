@@ -28,7 +28,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".NedajTransactionActivity"
+            android:name=".otherservices.NedajTransactionActivity"
             android:exported="false" />
         <activity
             android:name=".otherservices.NedajActivity"

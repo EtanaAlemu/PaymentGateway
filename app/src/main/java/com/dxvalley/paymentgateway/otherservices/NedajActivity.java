@@ -230,7 +230,7 @@ public class NedajActivity extends AppCompatActivity implements View.OnClickList
         switch (item.getItemId()) {
 
             case R.id.report:
-                startActivity(new Intent(this, NedajTransactionActivity.class));
+                startActivity(new Intent(NedajActivity.this, NedajTransactionActivity.class));
 
                 return true;
         }
@@ -240,7 +240,7 @@ public class NedajActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.proceed){
+//        if(view.getId() == R.id.proceed){
             amount = mAmount.getText().toString();
             liter = mLiter.getText().toString();
             plateRegion = mPlateRegion.getText().toString();
@@ -252,10 +252,10 @@ public class NedajActivity extends AppCompatActivity implements View.OnClickList
                         .make(rootView, "Fill all fields", Snackbar.LENGTH_LONG);
                 snackbar.show();
             } else {
-
+                proceed();
             }
 
-        }
+//        }
     }
 
     private void proceed(){
@@ -311,6 +311,8 @@ public class NedajActivity extends AppCompatActivity implements View.OnClickList
                 mAmount.setText(null);
                 mLiter.setText(null);
                 mPlateNumber.setText(null);
+                mPlateCode.setText(null);
+                mPlateRegion.setText(null);
             });
 //                BitMatrix bitMatrix = multiFormatWriter.encode(Base64.getEncoder().encodeToString(cipherText), BarcodeFormat.QR_CODE, 1000, 1000);
             BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE, 1000, 1000);
