@@ -12,5 +12,147 @@
     <string name="show_error">SHOW ERROR</string>
     <string name="show_success">SHOW Success</string>
     <string name="restore_failed">Restore Failed</string>
+    <string name="plate_region_or_country_code">Plate Region or Country code:</string>
+    <string name="plate_code">Plate Code:</string>
 
+    <string-array name="plate_code_data">
+        <item>3</item>
+        <item>1</item>
+        <item>2</item>
+        <item>4</item>
+        <item>5</item>
+        <item>UN / የተመ</item>
+        <item>AU / አሕ</item>
+        <item>ተላላፊ</item>
+    </string-array>
+    <string-array name="plate_region_data">
+        <item>አአ / AA</item>
+        <item>ኢት / ET</item>
+        <item>አፋ / AF</item>
+        <item>አማ / AM</item>
+        <item>ቤጉ / BG</item>
+        <item>ድሬ / DR</item>
+        <item>ጋም / GM</item>
+        <item>ሐረ / HR</item>
+        <item>ኦሮ / OR</item>
+        <item>ሶማ / SM</item>
+
+        <item>CD 01</item>
+        <item>CD 02</item>
+        <item>CD 03</item>
+        <item>CD 04</item>
+        <item>CD 05</item>
+        <item>CD 06</item>
+        <item>CD 08</item>
+        <item>CD 09</item>
+
+        <item>CD 10</item>
+        <item>CD 11</item>
+        <item>CD 12</item>
+        <item>CD 13</item>
+        <item>CD 14</item>
+        <item>CD 15</item>
+        <item>CD 16</item>
+        <item>CD 18</item>
+        <item>CD 19</item>
+        <item>CD 20</item>
+
+        <item>CD 21</item>
+        <item>CD 22</item>
+        <item>CD 23</item>
+        <item>CD 24</item>
+        <item>CD 25</item>
+        <item>CD 26</item>
+        <item>CD 28</item>
+        <item>CD 29</item>
+        <item>CD 30</item>
+
+        <item>CD 31</item>
+        <item>CD 32</item>
+        <item>CD 33</item>
+        <item>CD 34</item>
+        <item>CD 35</item>
+        <item>CD 36</item>
+        <item>CD 38</item>
+        <item>CD 39</item>
+        <item>CD 40</item>
+
+        <item>CD 41</item>
+        <item>CD 42</item>
+        <item>CD 43</item>
+        <item>CD 44</item>
+        <item>CD 45</item>
+        <item>CD 46</item>
+        <item>CD 48</item>
+        <item>CD 49</item>
+        <item>CD 50</item>
+
+        <item>CD 51</item>
+        <item>CD 52</item>
+        <item>CD 53</item>
+        <item>CD 54</item>
+        <item>CD 55</item>
+        <item>CD 56</item>
+        <item>CD 58</item>
+        <item>CD 59</item>
+        <item>CD 60</item>
+
+        <item>CD 61</item>
+        <item>CD 62</item>
+        <item>CD 63</item>
+        <item>CD 64</item>
+        <item>CD 65</item>
+        <item>CD 66</item>
+        <item>CD 68</item>
+        <item>CD 69</item>
+
+        <item>CD 70</item>
+        <item>CD 71</item>
+        <item>CD 72</item>
+        <item>CD 73</item>
+        <item>CD 74</item>
+        <item>CD 75</item>
+        <item>CD 76</item>
+        <item>CD 78</item>
+        <item>CD 79</item>
+
+        <item>CD 80</item>
+        <item>CD 81</item>
+        <item>CD 82</item>
+        <item>CD 83</item>
+        <item>CD 84</item>
+        <item>CD 85</item>
+        <item>CD 86</item>
+        <item>CD 88</item>
+        <item>CD 89</item>
+
+        <item>CD 90</item>
+        <item>CD 91</item>
+        <item>CD 92</item>
+        <item>CD 93</item>
+        <item>CD 94</item>
+        <item>CD 95</item>
+        <item>CD 96</item>
+        <item>CD 98</item>
+        <item>CD 99</item>
+
+        <item>CD 101</item>
+        <item>CD 100</item>
+        <item>CD 102</item>
+        <item>CD 103</item>
+        <item>CD 104</item>
+        <item>CD 105</item>
+        <item>CD 106</item>
+        <item>CD 108</item>
+        <item>CD 109</item>
+        <item>CD 110</item>
+
+        <item>CD 111</item>
+        <item>CD 112</item>
+        <item>CD 113</item>
+        <item>CD 114</item>
+        <item>CD 115</item>
+        <item>CD 116</item>
+
+    </string-array>
 </resources>

@@ -24,6 +24,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:theme="@style/TextInputLayoutStyle"
             app:boxBackgroundMode="outline">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -31,6 +32,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
+
+                android:background="@color/white"
+                app:errorEnabled="true"
                 android:hint="Amount"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -40,6 +44,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:theme="@style/TextInputLayoutStyle"
             app:boxBackgroundMode="outline">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -47,6 +52,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
+                android:background="@color/white"
+                app:errorEnabled="true"
                 android:hint="Liter"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,64 +64,68 @@
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:theme="@style/TextInputLayoutStyle"
             app:boxBackgroundMode="outline">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/plate_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:errorEnabled="true"
                 android:hint="Plate Number"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-<!--        <com.google.android.material.textfield.TextInputLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            app:boxBackgroundMode="outline">-->
-
-<!--            <com.google.android.material.textfield.TextInputEditText-->
-<!--                android:id="@+id/plate_code"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:hint="Plate Code"/>-->
-<!--        </com.google.android.material.textfield.TextInputLayout>-->
-        <!-- Spinner Element -->
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:hint="Plate Code"
-                    app:boxBackgroundMode="outline">
-        <Spinner
-            android:id="@+id/plate_code"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:prompt="Plate Code"
+            android:layout_marginEnd="16dp">
 
-            />
-                </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:text="@string/plate_code"
+                android:layout_marginBottom="5dp"
+                />
+            <Spinner
+                android:id="@+id/plate_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:prompt="@string/plate_code"
+
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            app:boxBackgroundMode="outline">
+            android:layout_marginEnd="16dp">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:text="@string/plate_region_or_country_code"
+                android:layout_marginBottom="5dp"
+                />
+            <Spinner
                 android:id="@+id/plate_number_region"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Plate Region or Country code "/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:prompt="@string/plate_region_or_country_code"/>
+        </LinearLayout>
 
         <Button
             android:id="@+id/proceed"

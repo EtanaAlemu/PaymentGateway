@@ -170,26 +170,21 @@ public class NedajActivity extends AppCompatActivity implements AdapterView.OnIt
             }
         });
 
-
-
         // Spinner click listener
         mPlateCode.setOnItemSelectedListener(this);
+        mPlateRegion.setOnItemSelectedListener(this);
 
-        // Spinner Drop down elements
-        List<String> categories = new ArrayList<String>();
-        categories.add("1");
-        categories.add("2");
-        categories.add("3");
-        categories.add("4");
-        categories.add("5");
         // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<CharSequence> plateCodeAdapter = ArrayAdapter.createFromResource(this,  R.array.plate_code_data,android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> plateRegionAdapter = ArrayAdapter.createFromResource(this, R.array.plate_region_data,android.R.layout.simple_spinner_item);
 
         // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        plateCodeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        plateRegionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // attaching data adapter to spinner
-        mPlateCode.setAdapter(dataAdapter);
+        mPlateCode.setAdapter(plateCodeAdapter);
+        mPlateRegion.setAdapter(plateRegionAdapter);
 
         mProceed.setOnClickListener(this);
 
@@ -265,10 +260,12 @@ public class NedajActivity extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onClick(View view) {
 //        if(view.getId() == R.id.proceed){
+            String[] plateRegionValues = getResources().getStringArray(R.array.plate_region_data);
+            String[] plateCodeValues = getResources().getStringArray(R.array.plate_code_data);
             amount = mAmount.getText().toString();
             liter = mLiter.getText().toString();
-//            plateRegion = mPlateRegion.getText().toString();
-//            plateCode = mPlateCode.getText().toString();
+            plateRegion = plateRegionValues[mPlateRegion.getSelectedItemPosition()];
+            plateCode = plateCodeValues[mPlateCode.getSelectedItemPosition()];
             plateNumber = mPlateNumber.getText().toString();
 
             if(amount.isEmpty()||liter.isEmpty()||plateNumber.isEmpty()||plateCode.isEmpty()||plateRegion.isEmpty()){
@@ -285,6 +282,7 @@ public class NedajActivity extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
         // On selecting a spinner item
         String item = parent.getItemAtPosition(position).toString();
 
