@@ -186,6 +186,9 @@ public class NedajActivity extends AppCompatActivity implements AdapterView.OnIt
         mPlateCode.setAdapter(plateCodeAdapter);
         mPlateRegion.setAdapter(plateRegionAdapter);
 
+        mPlateCode.setSelection(2);
+        mPlateRegion.setSelection(1);
+
         mProceed.setOnClickListener(this);
 
         // Initialize contacts

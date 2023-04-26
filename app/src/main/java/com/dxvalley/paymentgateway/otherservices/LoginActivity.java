@@ -44,7 +44,7 @@ import java.util.Base64;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "MY_APP";
-    private String url = "http://192.168.137.1:5000/api/agent/login";
+    private String url = getString(R.string.base_url)+"/api/agent/login";
     private RequestQueue mRequestQueue;
     private JsonObjectRequest mRequest;
     @Override
@@ -77,12 +77,10 @@ public class LoginActivity extends AppCompatActivity {
 
         //String Request initialized
         mRequest = new JsonObjectRequest(Request.Method.POST, url, request(username, password), new Response.Listener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(Object response) {
-//                Toast.makeText(getApplicationContext(),"Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
 
-                Log.i("MayApp", "Response :" + response);
+                Log.i(TAG, "Response :" + response);
 
                 pDialog.cancel();
                 try {
@@ -98,10 +96,10 @@ public class LoginActivity extends AppCompatActivity {
 
                         obj = new JSONObject(payload);
 
-                        Log.d("My App", obj.toString());
+                        Log.d(TAG, obj.toString());
 
                     } catch (Throwable t) {
-                        Log.e("My App", "Could not parse malformed JSON: \"" + payload + "\"");
+                        Log.e(TAG, "Could not parse malformed JSON: \"" + payload + "\"");
                     }
                     Gson gson= new Gson();
                     User user = gson.fromJson(jsonObject.toString(),User.class);
@@ -119,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Log.i("MyApp", "Error :" + error.toString());
+                Log.i(TAG, "Error :" + error.toString());
                 Toast.makeText(getApplicationContext(), "Volley Error :" + error, Toast.LENGTH_LONG).show();//display the response on screen
 
                 pDialog.cancel();
@@ -139,8 +137,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        VolleySingleton.getInstance(this).addToRequestQueue(mRequest);
+//        VolleySingleton.getInstance(this).addToRequestQueue(mRequest);
 
+        mRequestQueue.add(mRequest);
 
     }
 
@@ -217,13 +216,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private JSONObject request(String username, String password){
+    private JSONObject request(String email, String password){
 
         JSONObject requestObject =new JSONObject();
 
 
         try{
-            requestObject.put("email",username);
+            requestObject.put("email",email);
             requestObject.put("password", password);
 
 

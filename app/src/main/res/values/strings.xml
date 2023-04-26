@@ -14,11 +14,12 @@
     <string name="restore_failed">Restore Failed</string>
     <string name="plate_region_or_country_code">Plate Region or Country code:</string>
     <string name="plate_code">Plate Code:</string>
+    <string name="base_url">http://192.168.137.1:5000</string>
 
     <string-array name="plate_code_data">
-        <item>3</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
         <item>4</item>
         <item>5</item>
         <item>UN / የተመ</item>
@@ -26,8 +27,8 @@
         <item>ተላላፊ</item>
     </string-array>
     <string-array name="plate_region_data">
-        <item>አአ / AA</item>
         <item>ኢት / ET</item>
+        <item>አአ / AA</item>
         <item>አፋ / AF</item>
         <item>አማ / AM</item>
         <item>ቤጉ / BG</item>
