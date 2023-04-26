@@ -7,8 +7,11 @@ import androidx.security.crypto.MasterKeys;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,10 +22,16 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -34,12 +43,19 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 
+import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.MalformedURLException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.security.GeneralSecurityException;
 import java.util.Base64;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -47,6 +63,8 @@ public class LoginActivity extends AppCompatActivity {
     private String url;
     private RequestQueue mRequestQueue;
     private JsonObjectRequest mRequest;
+    private Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         mUsername = findViewById(R.id.username);
         mPassword = findViewById(R.id.password);
         LinearLayout layout = findViewById(R.id.layout);
+        mContext = this;
 
         url = getString(R.string.base_url)+"/api/agent/login";
         login.setOnClickListener(view -> {
@@ -124,9 +143,53 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i(TAG, "Error :" + error.toString());
 
                 pDialog.cancel();
-                Agent agent = new Agent(1,"Jon","Doi","jondoi@gmail.com","900771378","agent", "1");
-                User user = new User(agent);
-//                loginProceed(user);
+
+                if(error instanceof NoConnectionError){
+
+                    ConnectivityManager cm = (ConnectivityManager) mContext
+                            .getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo activeNetwork = null;
+                    if (cm != null) {
+                        activeNetwork = cm.getActiveNetworkInfo();
+                    }
+                    if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()){
+                        Toast.makeText(mContext, "Server is not connected to internet.",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(mContext, "Your device is not connected to internet.",
+                                Toast.LENGTH_LONG).show();
+                    }
+                } else if (error instanceof NetworkError || error.getCause() instanceof ConnectException
+
+                        ){
+                    Toast.makeText(mContext, "Your device is not connected to internet.",
+                            Toast.LENGTH_LONG).show();
+                } else if (error.getCause() instanceof MalformedURLException){
+                    Toast.makeText(mContext, "Bad Request.", Toast.LENGTH_LONG).show();
+                } else if (error instanceof ParseError || error.getCause() instanceof IllegalStateException
+                        || error.getCause() instanceof JSONException
+                        || error.getCause() instanceof XmlPullParserException){
+                    Toast.makeText(mContext, "Parse Error (because of invalid json or xml).",
+                            Toast.LENGTH_LONG).show();
+                } else if (error.getCause() instanceof OutOfMemoryError){
+                    Toast.makeText(mContext, "Out Of Memory Error.", Toast.LENGTH_LONG).show();
+                }else if (error instanceof AuthFailureError){
+                    Toast.makeText(mContext, "server couldn't find the authenticated request.",
+                            Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError || error.getCause() instanceof ServerError) {
+                    Toast.makeText(mContext, "Server is not responding.", Toast.LENGTH_LONG).show();
+                    
+                }else if (error instanceof TimeoutError || error.getCause() instanceof SocketTimeoutException
+                        || error.getCause() instanceof ConnectTimeoutException
+                        || error.getCause() instanceof SocketException
+                        || (error.getCause().getMessage() != null
+                        && error.getCause().getMessage().contains("Connection timed out"))) {
+                    Toast.makeText(getApplicationContext(), "Connection timeout error",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "An unknown error occurred.",
+                            Toast.LENGTH_SHORT).show();
+                }
 
             }
         }) {
@@ -140,9 +203,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-//        VolleySingleton.getInstance(this).addToRequestQueue(mRequest);
-
-        mRequestQueue.add(mRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(mRequest);
 
     }
 
@@ -151,7 +212,7 @@ public class LoginActivity extends AppCompatActivity {
         // on below line we are setting data in our shared preferences.
         // creating a master key for encryption of shared preferences.
         String masterKeyAlias = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+
             try {
                 masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
 
@@ -177,21 +238,7 @@ public class LoginActivity extends AppCompatActivity {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        } else {
 
-            // Storing data into SharedPreferences
-            SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
-            // Creating an Editor object to edit(write to the file)
-            // Storing the key and its value as the data fetched from edittext
-
-            sharedPreferences.edit().putInt("agent_id", user.agent.agent_id).apply();
-            sharedPreferences.edit().putString("email_address", user.agent.email_address).apply();
-            sharedPreferences.edit().putString("user_id", user.agent.user_id).apply();
-            sharedPreferences.edit().putString("fname", user.agent.fname).apply();
-            sharedPreferences.edit().putString("lname", user.agent.lname).apply();
-            sharedPreferences.edit().putString("role", user.agent.role).apply();
-
-        }
 
         startActivity(new Intent(LoginActivity.this, NedajActivity.class));
     }

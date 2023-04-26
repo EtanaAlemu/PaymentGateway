@@ -4,7 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKeys;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -14,6 +18,8 @@ import com.dxvalley.paymentgateway.otherservices.adapter.TransactionAdapter;
 import com.dxvalley.paymentgateway.otherservices.model.Fuel;
 import com.dxvalley.paymentgateway.otherservices.model.NedajTransaction;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -30,6 +36,34 @@ public class NedajTransactionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nedaj_transaction);
         transactionRecyclerView = findViewById(R.id.transaction_rv);
         transactions = new ArrayList<>();
+
+        String fname;
+        String lname;
+        // on below line getting data from shared preferences.
+        // creating a master key for encryption of shared preferences.
+        String masterKeyAlias = null;
+            try {
+                masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+
+                // Initialize/open an instance of EncryptedSharedPreferences on below line.
+                SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                        // passing a file name to share a preferences
+                        "MerchantInfo",
+                        masterKeyAlias,
+                        getApplicationContext(),
+                        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+                );
+                // on below line creating a variable
+                // to get the data from shared prefs.
+                fname = sharedPreferences.getString("fname", "");
+                lname = sharedPreferences.getString("lname", "");
+            } catch (GeneralSecurityException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
 
         transactions.add(new NedajTransaction("500","Regular","TX00923", "M09332", "12:00"));
         transactions.add(new NedajTransaction("1000","Diesel","TX00924", "M09333", "12:10"));

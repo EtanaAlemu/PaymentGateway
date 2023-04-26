@@ -49,7 +49,7 @@ public class TransactionAdapter extends
             amount = itemView.findViewById(R.id.amount);
             fuelType = itemView.findViewById(R.id.fuelType);
             transactionId = itemView.findViewById(R.id.transactionId);
-            messageId = itemView.findViewById(R.id.messageId);
+//            messageId = itemView.findViewById(R.id.messageId);
             time = itemView.findViewById(R.id.time);
         }
 
@@ -93,8 +93,8 @@ public class TransactionAdapter extends
 
         // Set item views based on your views and data model
         holder.transactionId .setText(itemList.get(position).getTransactionId());
-        holder.amount.setText(itemList.get(position).getAmount());
-        holder.messageId.setText(itemList.get(position).getMessageId());
+        holder.amount.setText(itemList.get(position).getAmount() + " Birr");
+//        holder.messageId.setText(itemList.get(position).getMessageId());
         holder.fuelType.setText(itemList.get(position).getFuelType());
         holder.time.setText(itemList.get(position).getTime());
     }
