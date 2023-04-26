@@ -250,7 +250,6 @@ public class NedajActivity extends AppCompatActivity implements AdapterView.OnIt
         loadFuels();
 
         setUpAdapter();
-        postAndNotifyAdapter(new Handler(), fuelRecyclerView);
     }
 
 
@@ -392,20 +391,6 @@ public class NedajActivity extends AppCompatActivity implements AdapterView.OnIt
                 loadFuels();
                 break;
         }
-    }
-
-    protected void postAndNotifyAdapter(final Handler handler, final RecyclerView recyclerView) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (!recyclerView.isComputingLayout()) {
-                    // This will call first item by calling "performClick()" of view.
-                    ((NedajAdapter.ViewHolder) recyclerView.findViewHolderForLayoutPosition(0)).itemView.performClick();
-                } else {
-                    postAndNotifyAdapter(handler, recyclerView);
-                }
-            }
-        });
     }
 
     @Override
