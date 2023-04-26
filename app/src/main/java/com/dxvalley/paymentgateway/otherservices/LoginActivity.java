@@ -44,7 +44,7 @@ import java.util.Base64;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "MY_APP";
-    private String url = getString(R.string.base_url)+"/api/agent/login";
+    private String url;
     private RequestQueue mRequestQueue;
     private JsonObjectRequest mRequest;
     @Override
@@ -57,6 +57,8 @@ public class LoginActivity extends AppCompatActivity {
         mUsername = findViewById(R.id.username);
         mPassword = findViewById(R.id.password);
         LinearLayout layout = findViewById(R.id.layout);
+
+        url = getString(R.string.base_url)+"/api/agent/login";
         login.setOnClickListener(view -> {
             if (mUsername.getText().toString().isEmpty() || mPassword.getText().toString().isEmpty()) {
                 Snackbar snackbar = Snackbar.make(layout,"Please enter username and password",Snackbar.LENGTH_LONG);
@@ -68,7 +70,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
-
     private void login(String username, String password) {
         ProgressDialog pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
@@ -87,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                     JSONObject jsonObject = (JSONObject) response;
                     String token = jsonObject.get("token").toString();
                     String[] chunks = token.split("\\.");
+
                     Base64.Decoder decoder = Base64.getUrlDecoder();
 
                     String header = new String(decoder.decode(chunks[0]));
@@ -98,17 +100,19 @@ public class LoginActivity extends AppCompatActivity {
 
                         Log.d(TAG, obj.toString());
 
+                        Gson gson= new Gson();
+
+                        User user = gson.fromJson(obj.toString(),User.class);
+
+                        loginProceed(user);
+
                     } catch (Throwable t) {
                         Log.e(TAG, "Could not parse malformed JSON: \"" + payload + "\"");
                     }
-                    Gson gson= new Gson();
-                    User user = gson.fromJson(jsonObject.toString(),User.class);
-
-                    loginProceed(user);
 
                 } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "Response Error :" + response, Toast.LENGTH_LONG).show();//display the response on screen
-                    throw new RuntimeException(e);
+
+                    Log.e(TAG, "Response Error: "+e.getMessage());
                 }
             }
 
@@ -118,12 +122,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
                 Log.i(TAG, "Error :" + error.toString());
-                Toast.makeText(getApplicationContext(), "Volley Error :" + error, Toast.LENGTH_LONG).show();//display the response on screen
 
                 pDialog.cancel();
-                Agent agent = new Agent("1","Jon","Doi","jondoi@gmail.com","900771378","agent", "1");
+                Agent agent = new Agent(1,"Jon","Doi","jondoi@gmail.com","900771378","agent", "1");
                 User user = new User(agent);
-                loginProceed(user);
+//                loginProceed(user);
 
             }
         }) {
@@ -131,8 +134,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
                 int mStatusCode = response.statusCode;
-                Toast.makeText(getApplicationContext(), "Status Code :" + mStatusCode, Toast.LENGTH_LONG).show();//display the response on screen
 
+                Log.e(TAG, "Status Code : " + mStatusCode);
                 return super.parseNetworkResponse(response);
             }
         };
@@ -162,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
                         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
                 );
                 // on below line we are storing data in shared preferences file.
-                sharedPreferences.edit().putString("agent_id", user.agent.agent_id).apply();
+                sharedPreferences.edit().putInt("agent_id", user.agent.agent_id).apply();
                 sharedPreferences.edit().putString("email_address", user.agent.email_address).apply();
                 sharedPreferences.edit().putString("user_id", user.agent.user_id).apply();
                 sharedPreferences.edit().putString("fname", user.agent.fname).apply();
@@ -181,7 +184,7 @@ public class LoginActivity extends AppCompatActivity {
             // Creating an Editor object to edit(write to the file)
             // Storing the key and its value as the data fetched from edittext
 
-            sharedPreferences.edit().putString("agent_id", user.agent.agent_id).apply();
+            sharedPreferences.edit().putInt("agent_id", user.agent.agent_id).apply();
             sharedPreferences.edit().putString("email_address", user.agent.email_address).apply();
             sharedPreferences.edit().putString("user_id", user.agent.user_id).apply();
             sharedPreferences.edit().putString("fname", user.agent.fname).apply();
@@ -245,7 +248,7 @@ class User{
 }
 
 class Agent{
-    String agent_id;
+    int agent_id;
     String fname;
     String lname;
     String email_address;
@@ -253,7 +256,7 @@ class Agent{
     String role;
     String user_id;
 
-    public Agent(String agent_id, String fname, String lname, String email_address, String phone_number, String role, String user_id) {
+    public Agent(int agent_id, String fname, String lname, String email_address, String phone_number, String role, String user_id) {
         this.agent_id = agent_id;
         this.fname = fname;
         this.lname = lname;
