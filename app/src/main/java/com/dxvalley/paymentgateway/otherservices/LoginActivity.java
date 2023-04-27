@@ -2,14 +2,22 @@ package com.dxvalley.paymentgateway.otherservices;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.TimeAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -18,8 +26,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -64,17 +75,19 @@ public class LoginActivity extends AppCompatActivity {
     private RequestQueue mRequestQueue;
     private JsonObjectRequest mRequest;
     private Context mContext;
+    static RelativeLayout layout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        Button login = findViewById(R.id.login);
+        getSupportActionBar().hide();
+        CardView login = findViewById(R.id.login);
         TextInputEditText mUsername, mPassword;
         mUsername = findViewById(R.id.username);
         mPassword = findViewById(R.id.password);
-        LinearLayout layout = findViewById(R.id.layout);
+        layout = findViewById(R.id.activity_account_detail);
         mContext = this;
 
         url = getString(R.string.base_url)+"/api/agent/login";
@@ -86,7 +99,6 @@ public class LoginActivity extends AppCompatActivity {
                 login(mUsername.getText().toString(),mPassword.getText().toString());
             }
         });
-
 
     }
     private void login(String username, String password) {
@@ -153,42 +165,49 @@ public class LoginActivity extends AppCompatActivity {
                         activeNetwork = cm.getActiveNetworkInfo();
                     }
                     if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()){
-                        Toast.makeText(mContext, "Server is not connected to internet.",
-                                Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar = Snackbar.make(layout, "Server is not connected to internet.",Snackbar.LENGTH_LONG);
+                        snackbar.show();
                     } else {
-                        Toast.makeText(mContext, "Your device is not connected to internet.",
-                                Toast.LENGTH_LONG).show();
+                        Snackbar snackbar = Snackbar.make(layout, "Your device is not connected to internet.",Snackbar.LENGTH_LONG);
+                        snackbar.show();
                     }
                 } else if (error instanceof NetworkError || error.getCause() instanceof ConnectException
 
                         ){
-                    Toast.makeText(mContext, "Your device is not connected to internet.",
-                            Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(layout, "Your device is not connected to internet.",Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 } else if (error.getCause() instanceof MalformedURLException){
-                    Toast.makeText(mContext, "Bad Request.", Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(layout, "Bad Request.",Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 } else if (error instanceof ParseError || error.getCause() instanceof IllegalStateException
                         || error.getCause() instanceof JSONException
                         || error.getCause() instanceof XmlPullParserException){
-                    Toast.makeText(mContext, "Parse Error (because of invalid json or xml).",
-                            Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(layout, "Parse Error (because of invalid json or xml).",Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 } else if (error.getCause() instanceof OutOfMemoryError){
-                    Toast.makeText(mContext, "Out Of Memory Error.", Toast.LENGTH_LONG).show();
+
+                    Snackbar snackbar = Snackbar.make(layout, "Out Of Memory Error.",Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }else if (error instanceof AuthFailureError){
-                    Toast.makeText(mContext, "server couldn't find the authenticated request.",
-                            Toast.LENGTH_LONG).show();
+
+                    Snackbar snackbar = Snackbar.make(layout, "server couldn't find the authenticated request.",Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 } else if (error instanceof ServerError || error.getCause() instanceof ServerError) {
-                    Toast.makeText(mContext, "Server is not responding.", Toast.LENGTH_LONG).show();
-                    
+
+                    Snackbar snackbar = Snackbar.make(layout, "Server is not responding.",Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }else if (error instanceof TimeoutError || error.getCause() instanceof SocketTimeoutException
                         || error.getCause() instanceof ConnectTimeoutException
                         || error.getCause() instanceof SocketException
                         || (error.getCause().getMessage() != null
                         && error.getCause().getMessage().contains("Connection timed out"))) {
-                    Toast.makeText(getApplicationContext(), "Connection timeout error",
-                            Toast.LENGTH_SHORT).show();
+
+                    Snackbar snackbar = Snackbar.make(layout, "Connection timeout error",Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "An unknown error occurred.",
-                            Toast.LENGTH_SHORT).show();
+
+                    Snackbar snackbar = Snackbar.make(layout, "An unknown error occurred.",Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }
 
             }
@@ -284,6 +303,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.i(TAG, "request: "+requestObject);
         return requestObject;
     }
+
 }
 
 class User{
@@ -312,4 +332,5 @@ class Agent{
         this.role = role;
         this.user_id = user_id;
     }
+
 }

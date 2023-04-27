@@ -55,7 +55,7 @@
             android:exported="false" />
         <activity
             android:name=".otherservices.LoginActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".retailservices.MainActivity"
             android:configChanges="orientation|screenSize"

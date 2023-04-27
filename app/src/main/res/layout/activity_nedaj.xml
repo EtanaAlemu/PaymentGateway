@@ -107,9 +107,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLength="6"
-                        android:inputType="textCapWords"
+                        android:digits="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:inputType="textCapSentences"
                         android:imeOptions="actionDone"
-                        android:hint="Plate Number"
+                        android:hint="Plate Number (A12345)"
                         app:errorEnabled="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 

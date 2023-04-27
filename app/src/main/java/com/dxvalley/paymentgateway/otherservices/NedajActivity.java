@@ -115,6 +115,8 @@ public class NedajActivity extends AppCompatActivity implements AdapterView.OnIt
     String merchantId;
     String agentId;
 
+    String[] code;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +136,7 @@ public class NedajActivity extends AppCompatActivity implements AdapterView.OnIt
 
         fuelRecyclerView = findViewById(R.id.fuel_rv);
 
+        code = getResources().getStringArray(R.array.plate_code_data);
 
         // on below line getting data from shared preferences.
         // creating a master key for encryption of shared preferences.
@@ -273,6 +276,7 @@ public class NedajActivity extends AppCompatActivity implements AdapterView.OnIt
         // Attach the adapter to the recyclerview to populate items
         fuelRecyclerView.setAdapter(nedajAdapter);
 
+        fuelRecyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         // Set layout manager to position the items
         fuelRecyclerView.setLayoutManager(gridLayoutManager);
@@ -371,6 +375,7 @@ public class NedajActivity extends AppCompatActivity implements AdapterView.OnIt
         int id  = view.getId();
         switch (id){
             case R.id.proceed:
+
             String[] plateRegionValues = getResources().getStringArray(R.array.plate_region_data);
             String[] plateCodeValues = getResources().getStringArray(R.array.plate_code_data);
             amount = mAmount.getText().toString();
@@ -378,6 +383,12 @@ public class NedajActivity extends AppCompatActivity implements AdapterView.OnIt
             plateRegion = plateRegionValues[mPlateRegion.getSelectedItemPosition()];
             plateCode = plateCodeValues[mPlateCode.getSelectedItemPosition()];
             plateNumber = mPlateNumber.getText().toString();
+
+
+                if (plateCode.equals(plateCodeValues[5])||plateCode.equals(plateCodeValues[6])||plateCode.equals(plateCodeValues[7]))
+                    plateRegion = "";
+                else
+                    plateRegion = plateRegionValues[mPlateRegion.getSelectedItemPosition()];
 
             if(amount.isEmpty()||liter.isEmpty()||plateNumber.isEmpty()||plateCode.isEmpty()||plateRegion.isEmpty()){
                 Snackbar snackbar = Snackbar
@@ -399,8 +410,10 @@ public class NedajActivity extends AppCompatActivity implements AdapterView.OnIt
         // On selecting a spinner item
         String item = parent.getItemAtPosition(position).toString();
 
-        // Showing selected spinner item
-//        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+        if (item.equals(code[5])||item.equals(code[6])||item.equals(code[7]))
+            mPlateRegion.setEnabled(false);
+        else
+            mPlateRegion.setEnabled(true);
 
     }
 

@@ -8,8 +8,9 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="400dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="-50dp"
@@ -21,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -28,7 +30,6 @@
                 android:layout_marginBottom="50dp"
                 android:src="@drawable/coop"
                 app:tint="@color/white" />
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -170,38 +171,15 @@
                     android:id="@+id/imageview_account_profile"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:layout_marginBottom="4dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:elevation="4dp"
                     android:src="@drawable/gas"
                     app:civ_border_color="@color/white"
                     app:civ_border_width="2dp" />
 
             </RelativeLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="480dp"
-                android:layout_marginStart="8dp"
-                android:gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" Are you new here? "/>
 
-                <TextView
-                    android:id="@+id/create_account"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="Create Account"
-                    android:textColor="@color/blue"
-                    android:clickable="true"
-                    android:textStyle="bold"/>
-            </LinearLayout>
         </RelativeLayout>
-
 
 
     </ScrollView>

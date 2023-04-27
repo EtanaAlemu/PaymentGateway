@@ -24,3 +24,4 @@
 #https://github.com/sqlcipher/android-database-sqlcipher
 -keep,includedescriptorclasses class net.sqlcipher.** { *; }
 -keep,includedescriptorclasses interface net.sqlcipher.** { *; }
+-keep class shishirtstudio.com.proguardtest.data.network.apiResponse.** { *; }
