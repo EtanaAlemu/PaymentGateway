@@ -14,7 +14,7 @@
     <string name="restore_failed">Restore Failed</string>
     <string name="plate_region_or_country_code">Plate Region or Country code:</string>
     <string name="plate_code">Plate Code:</string>
-    <string name="base_url">http://192.168.14.210:5000</string>
+    <string name="base_url">http://192.168.137.1:5000</string>
 
     <string-array name="plate_code_data">
         <item>1</item>

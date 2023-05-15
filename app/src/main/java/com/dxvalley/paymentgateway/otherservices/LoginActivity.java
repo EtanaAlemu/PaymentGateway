@@ -247,7 +247,7 @@ public class LoginActivity extends AppCompatActivity {
                 // on below line we are storing data in shared preferences file.
                 sharedPreferences.edit().putInt("agent_id", user.agent.agent_id).apply();
                 sharedPreferences.edit().putString("email_address", user.agent.email_address).apply();
-                sharedPreferences.edit().putString("user_id", user.agent.user_id).apply();
+                sharedPreferences.edit().putString("merchant_id", user.agent.merchant_id).apply();
                 sharedPreferences.edit().putString("fname", user.agent.fname).apply();
                 sharedPreferences.edit().putString("lname", user.agent.lname).apply();
                 sharedPreferences.edit().putString("role", user.agent.role).apply();
@@ -321,16 +321,16 @@ class Agent{
     String email_address;
     String phone_number;
     String role;
-    String user_id;
+    String merchant_id;
 
-    public Agent(int agent_id, String fname, String lname, String email_address, String phone_number, String role, String user_id) {
+    public Agent(int agent_id, String fname, String lname, String email_address, String phone_number, String role, String merchant_id) {
         this.agent_id = agent_id;
         this.fname = fname;
         this.lname = lname;
         this.email_address = email_address;
         this.phone_number = phone_number;
         this.role = role;
-        this.user_id = user_id;
+        this.merchant_id = merchant_id;
     }
 
 }
